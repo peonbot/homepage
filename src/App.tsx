@@ -1,4 +1,3 @@
-import { Fish, Github, ExternalLink } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { analyzeSpriteSheet, SpriteSheet, AnimationName } from './SpriteAnalyzer';
 
@@ -439,23 +438,13 @@ function App() {
       <nav className="border-b border-slate-700/50 backdrop-blur-sm bg-slate-900/50 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Fish className="w-8 h-8 text-cyan-400" />
-              <span className="text-xl font-bold text-white">Fishtank</span>
+            <div className="flex items-center gap-2">
+              <span className="text-xl font-bold text-white">Tank.Fish</span>
+              <span className="text-xs font-medium text-cyan-400 border border-cyan-400/30 rounded px-1.5 py-0.5">Beta</span>
             </div>
             <div className="flex items-center gap-6">
-              <a href="#features" className="text-slate-300 hover:text-white transition-colors">
-                Features
-              </a>
-              <a href="#docs" className="text-slate-300 hover:text-white transition-colors">
-                Docs
-              </a>
-              <a
-                href="https://github.com"
-                className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors"
-              >
-                <Github className="w-5 h-5" />
-                GitHub
+              <a href="/login" className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
+                Login
               </a>
             </div>
           </div>
@@ -482,65 +471,8 @@ function App() {
           <FishTank />
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a
-            href="#get-started"
-            className="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors"
-          >
-            Get Started
-          </a>
-          <a
-            href="#demo"
-            className="px-8 py-3 border border-slate-600 hover:border-slate-500 text-white rounded-lg transition-colors flex items-center gap-2"
-          >
-            View Demo
-            <ExternalLink className="w-4 h-4" />
-          </a>
-        </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-24 px-6 bg-slate-800/30">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-white text-center mb-12">Features</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <FeatureCard
-              title="Instant Deploy"
-              description="Deploy OpenClaw agents to your workspace in seconds with zero configuration."
-            />
-            <FeatureCard
-              title="Real-time Collaboration"
-              description="Watch your AI agents work in real-time with seamless updates and progress tracking."
-            />
-            <FeatureCard
-              title="Developer Friendly"
-              description="Built for developers with first-class support for code projects and workflows."
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-slate-700/50 py-12 px-6">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Fish className="w-6 h-6 text-cyan-400" />
-            <span className="text-lg font-semibold text-white">Fishtank</span>
-          </div>
-          <p className="text-slate-400">
-            AI-powered development platform
-          </p>
-        </div>
-      </footer>
-    </div>
-  );
-}
-
-function FeatureCard({ title, description }: { title: string; description: string }) {
-  return (
-    <div className="p-6 rounded-xl bg-slate-800/50 border border-slate-700/50 hover:border-slate-600/50 transition-colors">
-      <h3 className="text-xl font-semibold text-white mb-3">{title}</h3>
-      <p className="text-slate-400">{description}</p>
     </div>
   );
 }

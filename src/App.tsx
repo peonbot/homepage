@@ -13,21 +13,31 @@ interface CharacterState {
   frameTime: number;
   scale: number;
   facingLeft: boolean;
-  // State machine for behavior
-  stateTimer: number;
+  reactionLoops: number;
 }
 
 const ANIMATIONS: AnimationName[] = ['idle', 'working', 'done', 'needHelp', 'searching'];
+
+interface CollisionBubble {
+  id: number;
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  opacity: number;
+}
 
 function FishTank() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [characters, setCharacters] = useState<CharacterState[]>([]);
   const [spriteSheets, setSpriteSheets] = useState<SpriteSheet[]>([]);
   const [loading, setLoading] = useState(true);
+  const [collisionBubbles, setCollisionBubbles] = useState<CollisionBubble[]>([]);
   const animationRef = useRef<number>();
   const lastTimeRef = useRef<number>(0);
+  const bubbleIdRef = useRef(0);
 
-  // Load and analyze sprite sheets
   useEffect(() => {
     async function loadSprites() {
       try {
@@ -50,13 +60,11 @@ function FishTank() {
     loadSprites();
   }, []);
 
-  // Initialize characters once sprites are loaded
   useEffect(() => {
     if (spriteSheets.length === 0) return;
 
     const initialCharacters: CharacterState[] = [];
 
-    // One of each character, all same size
     for (let i = 0; i < spriteSheets.length; i++) {
       initialCharacters.push({
         id: i,
@@ -66,17 +74,16 @@ function FishTank() {
         vy: (Math.random() - 0.5) * 25,
         facingLeft: Math.random() < 0.5,
         spriteSheet: spriteSheets[i],
-        currentAnimation: ANIMATIONS[Math.floor(Math.random() * ANIMATIONS.length)],
+        currentAnimation: 'idle',
         frameIndex: 0,
         frameTime: 0,
         scale: 2,
-        stateTimer: Math.random() * 5 + 2,
+        reactionLoops: 0,
       });
     }
     setCharacters(initialCharacters);
   }, [spriteSheets]);
 
-  // Animation loop
   useEffect(() => {
     if (characters.length === 0) return;
 
@@ -94,21 +101,17 @@ function FishTank() {
       const height = bounds.height;
 
       setCharacters(prevChars => {
-        // First pass: update positions and wall collisions
         const updated = prevChars.map(char => {
-          let { x, y, vx, vy, frameIndex, frameTime, currentAnimation, stateTimer, facingLeft } = char;
+          let { x, y, vx, vy, frameIndex, frameTime, currentAnimation, facingLeft, reactionLoops } = char;
           const { spriteSheet, scale } = char;
 
-          // Update position
           x += vx * deltaTime;
           y += vy * deltaTime;
 
-          // Get current animation data
           const animation = spriteSheet.animations.find(a => a.name === currentAnimation);
           const frameWidth = animation?.frames[0]?.width || 32;
           const frameHeight = animation?.frames[0]?.height || 32;
 
-          // Bounce off walls
           const paddingX = (frameWidth * scale) / 2;
           const paddingY = (frameHeight * scale) / 2;
 
@@ -128,11 +131,9 @@ function FishTank() {
             vy = -Math.abs(vy) * 0.95;
           }
 
-          // Add slight random movement
           vx += (Math.random() - 0.5) * 2;
           vy += (Math.random() - 0.5) * 1;
 
-          // Limit speed
           const maxSpeed = 60;
           const minSpeed = 10;
           const speed = Math.sqrt(vx * vx + vy * vy);
@@ -144,26 +145,35 @@ function FishTank() {
             vy = (vy / speed) * minSpeed;
           }
 
-          // Only update facing direction when velocity is strong enough
           if (vx < -5) facingLeft = true;
           else if (vx > 5) facingLeft = false;
 
-          // Update animation frame
           frameTime += deltaTime;
           const frameDuration = 0.15;
 
           if (animation && animation.frames.length > 0) {
             if (frameTime >= frameDuration) {
               frameTime = 0;
-              frameIndex = (frameIndex + 1) % animation.frames.length;
+              const nextFrame = (frameIndex + 1) % animation.frames.length;
+              // Check if animation looped
+              if (nextFrame < frameIndex && reactionLoops > 0) {
+                reactionLoops--;
+                if (reactionLoops === 0) {
+                  currentAnimation = 'idle';
+                  frameIndex = 0;
+                } else {
+                  frameIndex = nextFrame;
+                }
+              } else {
+                frameIndex = nextFrame;
+              }
             }
           }
 
-          return { ...char, x, y, vx, vy, facingLeft, frameIndex, frameTime, currentAnimation, stateTimer };
+          return { ...char, x, y, vx, vy, facingLeft, frameIndex, frameTime, currentAnimation, reactionLoops };
         });
 
-        // Second pass: character-to-character collisions
-        const collisionRadius = 30; // Approximate radius for collision
+        const collisionRadius = 30;
         for (let i = 0; i < updated.length; i++) {
           for (let j = i + 1; j < updated.length; j++) {
             const a = updated[i];
@@ -175,54 +185,80 @@ function FishTank() {
             const minDist = collisionRadius * 2;
 
             if (dist < minDist && dist > 0) {
-              // Normalize collision vector
               const nx = dx / dist;
               const ny = dy / dist;
 
-              // Push apart
               const overlap = (minDist - dist) / 2;
               a.x -= nx * overlap;
               a.y -= ny * overlap;
               b.x += nx * overlap;
               b.y += ny * overlap;
 
-              // Swap velocity components along collision axis
               const dvx = a.vx - b.vx;
               const dvy = a.vy - b.vy;
               const dotProduct = dvx * nx + dvy * ny;
 
-              // Only resolve if moving towards each other
               if (dotProduct > 0) {
                 a.vx -= nx * dotProduct * 0.8;
                 a.vy -= ny * dotProduct * 0.8;
                 b.vx += nx * dotProduct * 0.8;
                 b.vy += ny * dotProduct * 0.8;
+
+                // Spawn bubble burst at collision point
+                const midX = (a.x + b.x) / 2;
+                const midY = (a.y + b.y) / 2;
+                const newBubbles: CollisionBubble[] = [];
+                for (let k = 0; k < 8; k++) {
+                  const angle = (Math.PI * 2 * k) / 8 + Math.random() * 0.5;
+                  const speed = 30 + Math.random() * 40;
+                  newBubbles.push({
+                    id: bubbleIdRef.current++,
+                    x: midX,
+                    y: midY,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed - 20,
+                    size: 4 + Math.random() * 6,
+                    opacity: 1,
+                  });
+                }
+                setCollisionBubbles(prev => [...prev, ...newBubbles]);
+
+                // Change to a random non-idle animation on collision
+                const nonIdleAnimsA = a.spriteSheet.animations.filter(anim => anim.frames.length > 0 && anim.name !== 'idle');
+                const nonIdleAnimsB = b.spriteSheet.animations.filter(anim => anim.frames.length > 0 && anim.name !== 'idle');
+                if (nonIdleAnimsA.length > 0) {
+                  const newAnimA = nonIdleAnimsA[Math.floor(Math.random() * nonIdleAnimsA.length)];
+                  a.currentAnimation = newAnimA.name as AnimationName;
+                  a.frameIndex = 0;
+                  a.reactionLoops = 3;
+                }
+                if (nonIdleAnimsB.length > 0) {
+                  const newAnimB = nonIdleAnimsB[Math.floor(Math.random() * nonIdleAnimsB.length)];
+                  b.currentAnimation = newAnimB.name as AnimationName;
+                  b.frameIndex = 0;
+                  b.reactionLoops = 3;
+                }
               }
             }
           }
         }
 
-        // Third pass: state timer for animation switching
-        return updated.map(char => {
-          let { currentAnimation, stateTimer, frameIndex } = char;
-          const { spriteSheet } = char;
-
-          // State timer - occasionally switch animations
-          stateTimer -= deltaTime;
-          if (stateTimer <= 0) {
-            // Pick a new random animation
-            const validAnimations = spriteSheet.animations.filter(a => a.frames.length > 0);
-            if (validAnimations.length > 0) {
-              const newAnim = validAnimations[Math.floor(Math.random() * validAnimations.length)];
-              currentAnimation = newAnim.name as AnimationName;
-              frameIndex = 0;
-            }
-            stateTimer = Math.random() * 4 + 2;
-          }
-
-          return { ...char, currentAnimation, stateTimer, frameIndex };
-        });
+        return updated;
       });
+
+      // Update collision bubbles
+      setCollisionBubbles(prev =>
+        prev
+          .map(b => ({
+            ...b,
+            x: b.x + b.vx * deltaTime,
+            y: b.y + b.vy * deltaTime,
+            vx: b.vx * 0.95, // Slow horizontal movement
+            vy: b.vy - 80 * deltaTime, // Float upward
+            opacity: b.opacity - deltaTime * 0.4,
+          }))
+          .filter(b => b.opacity > 0 && b.y > -20)
+      );
 
       animationRef.current = requestAnimationFrame(animate);
     };
@@ -244,7 +280,6 @@ function FishTank() {
         boxShadow: 'inset 0 0 60px rgba(0,0,0,0.3), 0 0 40px rgba(34,211,238,0.2)',
       }}
     >
-      {/* Water surface effect */}
       <div
         className="absolute top-0 left-0 right-0 h-8 opacity-30"
         style={{
@@ -252,10 +287,8 @@ function FishTank() {
         }}
       />
 
-      {/* Bubbles */}
       <Bubbles />
 
-      {/* Sand/gravel at bottom */}
       <div
         className="absolute bottom-0 left-0 right-0 h-12"
         style={{
@@ -263,25 +296,35 @@ function FishTank() {
         }}
       />
 
-      {/* Seaweed */}
       <Seaweed x={80} height={100} />
       <Seaweed x={150} height={70} />
       <Seaweed x={480} height={90} />
       <Seaweed x={550} height={60} />
 
-      {/* Loading indicator */}
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-cyan-300 text-sm">Loading sprites...</div>
         </div>
       )}
 
-      {/* Characters */}
       {characters.map(char => (
         <SpriteCharacter key={char.id} character={char} />
       ))}
 
-      {/* Glass reflection */}
+      {collisionBubbles.map(bubble => (
+        <div
+          key={bubble.id}
+          className="absolute rounded-full bg-white/40 border border-white/60"
+          style={{
+            left: bubble.x - bubble.size / 2,
+            top: bubble.y - bubble.size / 2,
+            width: bubble.size,
+            height: bubble.size,
+            opacity: bubble.opacity,
+          }}
+        />
+      ))}
+
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -298,7 +341,6 @@ function SpriteCharacter({ character }: { character: CharacterState }) {
   const animation = spriteSheet.animations.find(a => a.name === currentAnimation);
 
   if (!animation || animation.frames.length === 0) {
-    // Fallback to first animation with frames
     const fallback = spriteSheet.animations.find(a => a.frames.length > 0);
     if (!fallback) return null;
 
@@ -434,7 +476,6 @@ function Seaweed({ x, height }: { x: number; height: number }) {
 function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Navigation */}
       <nav className="border-b border-slate-700/50 backdrop-blur-sm bg-slate-900/50 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
@@ -443,7 +484,7 @@ function App() {
               <span className="text-xs font-medium text-cyan-400 border border-cyan-400/30 rounded px-1.5 py-0.5">Beta</span>
             </div>
             <div className="flex items-center gap-6">
-              <a href="/login" className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
+              <a href="https://app.fishtank.bot" className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
                 Login
               </a>
             </div>
@@ -451,7 +492,6 @@ function App() {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <section className="py-16 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
@@ -461,12 +501,11 @@ function App() {
               Collaborative Workspace
             </span>
           </h1>
-          <p className="text-xl text-slate-400 mb-10 max-w-2xl mx-auto">
-            Instantly deploy agents like OpenClaw and watch them collaborate in real time.
-          </p>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/30 rounded-lg mb-10">
+            <span className="text-amber-400 text-sm font-medium">Under heavy development. Invite only.</span>
+          </div>
         </div>
 
-        {/* Fish Tank */}
         <div className="max-w-4xl mx-auto mb-10">
           <FishTank />
         </div>

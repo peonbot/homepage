@@ -484,6 +484,9 @@ function App() {
               <span className="text-xs font-medium text-cyan-400 border border-cyan-400/30 rounded px-1.5 py-0.5">Beta</span>
             </div>
             <div className="flex items-center gap-6">
+              <a href="https://discord.gg/NnpcadkJVJ" className="px-4 py-2 border border-slate-600 hover:border-slate-500 text-slate-300 hover:text-white font-medium rounded-lg transition-colors text-sm">
+                Discord
+              </a>
               <a href="https://app.fishtank.bot" className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
                 Login
               </a>

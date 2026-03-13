@@ -13,10 +13,10 @@ Marketing landing page for Fishtank with 3D graphics.
 
 ```bash
 # Install dependencies
-pnpm install
+npm install
 
 # Run development server
-pnpm dev
+npm run dev
 ```
 
 The homepage runs on `http://localhost:5173`
@@ -24,47 +24,29 @@ The homepage runs on `http://localhost:5173`
 ## Testing
 
 ```bash
-pnpm test        # Run tests (watch mode)
-pnpm test:run    # Run tests once
+npm test        # Run tests (watch mode)
+npm run test:run    # Run tests once
 ```
 
 ## Build
 
 ```bash
 # Build for production
-pnpm build
+npm run build
 
 # Preview production build
-pnpm preview
+npm run preview
 ```
 
 Output is generated in the `dist/` directory.
 
 ## Deployment
 
-This is a static site built with Vite. Deploy the `dist/` folder to any static hosting:
+Deployed via **Cloudflare Pages** (project: `fishtank-9xf`). Pushing to `main` triggers an automatic build and deploy.
 
-### Cloudflare Pages
-
-1. Connect your repo to Cloudflare Pages
-2. Set build command: `pnpm build`
-3. Set output directory: `dist`
-
-### Vercel
-
-```bash
-vercel
-```
-
-### Netlify
-
-```bash
-netlify deploy --prod --dir=dist
-```
-
-### Manual
-
-Upload the contents of `dist/` to any static file server or CDN.
+- **Custom domain**: `www.fishtank.bot` (CNAME → `fishtank-9xf.pages.dev`)
+- **Build command**: `npm run build`
+- **Output directory**: `dist`
 
 ## Project Structure
 

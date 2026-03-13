@@ -274,7 +274,7 @@ function FishTank() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full max-w-2xl h-80 mx-auto rounded-2xl overflow-hidden"
+      className="relative w-full max-w-full sm:max-w-2xl h-48 sm:h-64 md:h-80 mx-auto rounded-2xl overflow-hidden"
       style={{
         background: 'linear-gradient(180deg, #0c4a6e 0%, #0e7490 50%, #155e75 100%)',
         boxShadow: 'inset 0 0 60px rgba(0,0,0,0.3), 0 0 40px rgba(34,211,238,0.2)',
@@ -296,10 +296,10 @@ function FishTank() {
         }}
       />
 
-      <Seaweed x={80} height={100} />
-      <Seaweed x={150} height={70} />
-      <Seaweed x={480} height={90} />
-      <Seaweed x={550} height={60} />
+      <Seaweed xPercent={12} height={100} />
+      <Seaweed xPercent={25} height={70} />
+      <Seaweed xPercent={75} height={90} />
+      <Seaweed xPercent={88} height={60} />
 
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center">
@@ -441,7 +441,7 @@ function Bubbles() {
   );
 }
 
-function Seaweed({ x, height }: { x: number; height: number }) {
+function Seaweed({ xPercent, height }: { xPercent: number; height: number }) {
   const [sway, setSway] = useState(0);
 
   useEffect(() => {
@@ -456,7 +456,7 @@ function Seaweed({ x, height }: { x: number; height: number }) {
   return (
     <svg
       className="absolute bottom-3"
-      style={{ left: x }}
+      style={{ left: `${xPercent}%` }}
       width="30"
       height={height}
       viewBox={`0 0 30 ${height}`}
@@ -474,6 +474,8 @@ function Seaweed({ x, height }: { x: number; height: number }) {
 }
 
 function App() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <nav className="border-b border-slate-700/50 backdrop-blur-sm bg-slate-900/50 sticky top-0 z-50">
@@ -483,7 +485,7 @@ function App() {
               <span className="text-xl font-bold text-white">Tank.Fish</span>
               <span className="text-xs font-medium text-cyan-400 border border-cyan-400/30 rounded px-1.5 py-0.5">Beta</span>
             </div>
-            <div className="flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-6">
               <a href="https://discord.gg/NnpcadkJVJ" className="px-4 py-2 border border-slate-600 hover:border-slate-500 text-slate-300 hover:text-white font-medium rounded-lg transition-colors text-sm">
                 Discord
               </a>
@@ -491,11 +493,34 @@ function App() {
                 Login
               </a>
             </div>
+            <button
+              className="md:hidden text-white p-2"
+              onClick={() => setMobileMenuOpen(prev => !prev)}
+              aria-label="Toggle menu"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {mobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
           </div>
+          {mobileMenuOpen && (
+            <div className="md:hidden flex flex-col gap-3 pt-4 pb-2">
+              <a href="https://discord.gg/NnpcadkJVJ" className="px-4 py-2 border border-slate-600 hover:border-slate-500 text-slate-300 hover:text-white font-medium rounded-lg transition-colors text-sm text-center">
+                Discord
+              </a>
+              <a href="https://app.fishtank.bot" className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm text-center">
+                Login
+              </a>
+            </div>
+          )}
         </div>
       </nav>
 
-      <section className="py-16 px-6">
+      <section className="py-8 px-4 md:py-16 md:px-6">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
             Human + Agent
@@ -504,7 +529,7 @@ function App() {
               Collaborative Workspace
             </span>
           </h1>
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/30 rounded-lg mb-10">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/30 rounded-lg mb-6 md:mb-10">
             <span className="text-amber-400 text-sm font-medium">Under heavy development. Invite only.</span>
           </div>
         </div>

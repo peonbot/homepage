@@ -28,7 +28,7 @@ interface CollisionBubble {
   opacity: number;
 }
 
-function FishTank() {
+function TitoTank() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [characters, setCharacters] = useState<CharacterState[]>([]);
   const [spriteSheets, setSpriteSheets] = useState<SpriteSheet[]>([]);
@@ -482,14 +482,14 @@ function App() {
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-xl font-bold text-white">Tank.Fish</span>
+              <span className="text-xl font-bold text-white">Tito</span>
               <span className="text-xs font-medium text-cyan-400 border border-cyan-400/30 rounded px-1.5 py-0.5">Beta</span>
             </div>
             <div className="hidden md:flex items-center gap-6">
               <a href="https://discord.gg/NnpcadkJVJ" className="px-4 py-2 border border-slate-600 hover:border-slate-500 text-slate-300 hover:text-white font-medium rounded-lg transition-colors text-sm">
                 Discord
               </a>
-              <a href="https://app.fishtank.bot" className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
+              <a href="https://app.tito.com" className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
                 Login
               </a>
             </div>
@@ -512,7 +512,7 @@ function App() {
               <a href="https://discord.gg/NnpcadkJVJ" className="px-4 py-2 border border-slate-600 hover:border-slate-500 text-slate-300 hover:text-white font-medium rounded-lg transition-colors text-sm text-center">
                 Discord
               </a>
-              <a href="https://app.fishtank.bot" className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm text-center">
+              <a href="https://app.tito.com" className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm text-center">
                 Login
               </a>
             </div>
@@ -522,20 +522,96 @@ function App() {
 
       <section className="py-8 px-4 md:py-16 md:px-6">
         <div className="max-w-4xl mx-auto text-center">
+          <p className="text-sm font-semibold tracking-widest uppercase text-cyan-400 mb-4">The industry front-runner in agent innovation</p>
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Human + Agent
+            Spearheading the
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-              Collaborative Workspace
+              Agent Transformation
             </span>
+            <br />
+            <span className="text-3xl md:text-4xl text-slate-300">for Business</span>
           </h1>
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/30 rounded-lg mb-6 md:mb-10">
-            <span className="text-amber-400 text-sm font-medium">Under heavy development. Invite only.</span>
+          <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto mb-6 leading-relaxed">
+            Tito is pioneering the shift from legacy, non-automated infrastructure to intelligent agent workflows &mdash; delivering <span className="text-cyan-400 font-semibold">50&ndash;90% cost savings</span> by replacing the systems businesses have outgrown.
+          </p>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-lg mb-6 md:mb-10">
+            <span className="text-cyan-400 text-sm font-medium">Early access &middot; Invite only</span>
           </div>
         </div>
 
         <div className="max-w-4xl mx-auto mb-10">
-          <FishTank />
+          <TitoTank />
+        </div>
+
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+          <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6 text-center">
+            <div className="text-3xl font-bold text-cyan-400 mb-2">50&ndash;90%</div>
+            <div className="text-sm text-slate-300">Cost savings on legacy non-automated infrastructure</div>
+          </div>
+          <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6 text-center">
+            <div className="text-3xl font-bold text-cyan-400 mb-2">Human + Agent</div>
+            <div className="text-sm text-slate-300">Collaborative workflows that replace brittle legacy systems</div>
+          </div>
+          <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6 text-center">
+            <div className="text-3xl font-bold text-cyan-400 mb-2">Built for Scale</div>
+            <div className="text-sm text-slate-300">Modern agent orchestration designed for real business operations</div>
+          </div>
+        </div>
+
+        <div className="max-w-4xl mx-auto mt-16">
+          <h2 className="text-2xl font-bold text-white text-center mb-2">What teams are saying</h2>
+          <p className="text-slate-400 text-center mb-8 text-sm">Replacing legacy infrastructure with agent-powered workflows</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
+              <p className="text-slate-300 text-sm leading-relaxed mb-4">
+                &ldquo;We were spending six figures a year on infrastructure that hadn&rsquo;t been rethought in a decade. Tito replaced 80% of it with agent workflows in under a month.&rdquo;
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-xs font-bold">DS</div>
+                <div>
+                  <div className="text-white text-sm font-medium">Director of Engineering</div>
+                  <div className="text-slate-500 text-xs">Series B SaaS Company</div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
+              <p className="text-slate-300 text-sm leading-relaxed mb-4">
+                &ldquo;The old way was manual processes duct-taped together. Tito gave us an agent layer that actually scales &mdash; and cut our ops costs by 65%.&rdquo;
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-xs font-bold">MR</div>
+                <div>
+                  <div className="text-white text-sm font-medium">VP of Operations</div>
+                  <div className="text-slate-500 text-xs">Enterprise Logistics Firm</div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
+              <p className="text-slate-300 text-sm leading-relaxed mb-4">
+                &ldquo;Everyone talks about AI transformation. Tito is the only team actually shipping it for real business operations, not demos.&rdquo;
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-xs font-bold">KL</div>
+                <div>
+                  <div className="text-white text-sm font-medium">CTO</div>
+                  <div className="text-slate-500 text-xs">Mid-Market Fintech</div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
+              <p className="text-slate-300 text-sm leading-relaxed mb-4">
+                &ldquo;We estimated 50% savings and ended up closer to 90%. The legacy systems we were maintaining were far more expensive than anyone realized.&rdquo;
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-xs font-bold">AP</div>
+                <div>
+                  <div className="text-white text-sm font-medium">Head of Infrastructure</div>
+                  <div className="text-slate-500 text-xs">Growth-Stage Marketplace</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
       </section>

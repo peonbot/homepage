@@ -28,7 +28,7 @@ interface CollisionBubble {
   opacity: number;
 }
 
-function TitoTank() {
+function AquariumScene() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [characters, setCharacters] = useState<CharacterState[]>([]);
   const [spriteSheets, setSpriteSheets] = useState<SpriteSheet[]>([]);
@@ -482,14 +482,14 @@ function App() {
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-xl font-bold text-white">Tito</span>
+              <span className="text-xl font-bold text-white">RunHQ</span>
               <span className="text-xs font-medium text-cyan-400 border border-cyan-400/30 rounded px-1.5 py-0.5">Beta</span>
             </div>
             <div className="hidden md:flex items-center gap-6">
               <a href="https://discord.gg/NnpcadkJVJ" className="px-4 py-2 border border-slate-600 hover:border-slate-500 text-slate-300 hover:text-white font-medium rounded-lg transition-colors text-sm">
                 Discord
               </a>
-              <a href="https://app.tito.com" className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
+              <a href="https://app.runhq.com" className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
                 Login
               </a>
             </div>
@@ -512,7 +512,7 @@ function App() {
               <a href="https://discord.gg/NnpcadkJVJ" className="px-4 py-2 border border-slate-600 hover:border-slate-500 text-slate-300 hover:text-white font-medium rounded-lg transition-colors text-sm text-center">
                 Discord
               </a>
-              <a href="https://app.tito.com" className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm text-center">
+              <a href="https://app.runhq.com" className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm text-center">
                 Login
               </a>
             </div>
@@ -533,7 +533,7 @@ function App() {
             <span className="text-3xl md:text-4xl text-slate-300">for Business</span>
           </h1>
           <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Tito is pioneering the shift from legacy, non-automated infrastructure to intelligent agent workflows &mdash; delivering <span className="text-cyan-400 font-semibold">50&ndash;90% cost savings</span> by replacing the systems businesses have outgrown.
+            RunHQ is pioneering the shift from legacy, non-automated infrastructure to intelligent agent workflows &mdash; delivering <span className="text-cyan-400 font-semibold">50&ndash;90% cost savings</span> by replacing the systems businesses have outgrown.
           </p>
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-lg mb-6 md:mb-10">
             <span className="text-cyan-400 text-sm font-medium">Early access &middot; Invite only</span>
@@ -541,7 +541,7 @@ function App() {
         </div>
 
         <div className="max-w-4xl mx-auto mb-10">
-          <TitoTank />
+          <AquariumScene />
         </div>
 
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
@@ -565,7 +565,7 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
               <p className="text-slate-300 text-sm leading-relaxed mb-4">
-                &ldquo;We were spending six figures a year on infrastructure that hadn&rsquo;t been rethought in a decade. Tito replaced 80% of it with agent workflows in under a month.&rdquo;
+                &ldquo;We were spending six figures a year on infrastructure that hadn&rsquo;t been rethought in a decade. RunHQ replaced 80% of it with agent workflows in under a month.&rdquo;
               </p>
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-xs font-bold">DS</div>
@@ -577,7 +577,7 @@ function App() {
             </div>
             <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
               <p className="text-slate-300 text-sm leading-relaxed mb-4">
-                &ldquo;The old way was manual processes duct-taped together. Tito gave us an agent layer that actually scales &mdash; and cut our ops costs by 65%.&rdquo;
+                &ldquo;The old way was manual processes duct-taped together. RunHQ gave us an agent layer that actually scales &mdash; and cut our ops costs by 65%.&rdquo;
               </p>
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-xs font-bold">MR</div>
@@ -589,7 +589,7 @@ function App() {
             </div>
             <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
               <p className="text-slate-300 text-sm leading-relaxed mb-4">
-                &ldquo;Everyone talks about AI transformation. Tito is the only team actually shipping it for real business operations, not demos.&rdquo;
+                &ldquo;Everyone talks about AI transformation. RunHQ is the only team actually shipping it for real business operations, not demos.&rdquo;
               </p>
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-xs font-bold">KL</div>

@@ -1,6 +1,6 @@
-# Fishtank Homepage
+# RunHQ Homepage
 
-Marketing landing page for Fishtank with 3D graphics.
+Marketing landing page for RunHQ — spearheading the agent transformation for business.
 
 ## Tech Stack
 
@@ -42,9 +42,9 @@ Output is generated in the `dist/` directory.
 
 ## Deployment
 
-Deployed via **Cloudflare Pages** (project: `fishtank-9xf`). Pushing to `main` triggers an automatic build and deploy.
+Deployed via **Cloudflare Pages** (project: `runhq`). Pushing to `main` triggers an automatic build and deploy.
 
-- **Custom domain**: `www.fishtank.bot` (CNAME → `fishtank-9xf.pages.dev`)
+- **Custom domain**: `www.runhq.com` (CNAME → `runhq.pages.dev`)
 - **Build command**: `npm run build`
 - **Output directory**: `dist`
 

@@ -28,7 +28,7 @@ interface CollisionBubble {
   opacity: number;
 }
 
-function AquariumScene() {
+function WorkspaceScene() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [characters, setCharacters] = useState<CharacterState[]>([]);
   const [spriteSheets, setSpriteSheets] = useState<SpriteSheet[]>([]);
@@ -47,8 +47,6 @@ function AquariumScene() {
           analyzeSpriteSheet('/images/man.png', 10, 5),
           analyzeSpriteSheet('/images/witch.png', 8, 5),
           analyzeSpriteSheet('/images/woman.png', 6, 5),
-          analyzeSpriteSheet('/images/lobster.png', 6, 3),
-          analyzeSpriteSheet('/images/fish.png', 10, 3),
         ]);
         setSpriteSheets(sheets);
         setLoading(false);
@@ -208,17 +206,17 @@ function AquariumScene() {
                 const midX = (a.x + b.x) / 2;
                 const midY = (a.y + b.y) / 2;
                 const newBubbles: CollisionBubble[] = [];
-                for (let k = 0; k < 8; k++) {
-                  const angle = (Math.PI * 2 * k) / 8 + Math.random() * 0.5;
-                  const speed = 30 + Math.random() * 40;
+                for (let k = 0; k < 6; k++) {
+                  const angle = (Math.PI * 2 * k) / 6 + Math.random() * 0.5;
+                  const speed = 20 + Math.random() * 30;
                   newBubbles.push({
                     id: bubbleIdRef.current++,
                     x: midX,
                     y: midY,
                     vx: Math.cos(angle) * speed,
-                    vy: Math.sin(angle) * speed - 20,
-                    size: 4 + Math.random() * 6,
-                    opacity: 1,
+                    vy: Math.sin(angle) * speed - 30,
+                    size: 2 + Math.random() * 4,
+                    opacity: 0.8,
                   });
                 }
                 setCollisionBubbles(prev => [...prev, ...newBubbles]);
@@ -276,34 +274,33 @@ function AquariumScene() {
       ref={containerRef}
       className="relative w-full max-w-full sm:max-w-2xl h-48 sm:h-64 md:h-80 mx-auto rounded-2xl overflow-hidden"
       style={{
-        background: 'linear-gradient(180deg, #0c4a6e 0%, #0e7490 50%, #155e75 100%)',
-        boxShadow: 'inset 0 0 60px rgba(0,0,0,0.3), 0 0 40px rgba(34,211,238,0.2)',
+        background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 60%, #334155 100%)',
+        boxShadow: 'inset 0 0 60px rgba(0,0,0,0.4), 0 0 40px rgba(34,211,238,0.15)',
       }}
     >
+      {/* Grid overlay */}
       <div
-        className="absolute top-0 left-0 right-0 h-8 opacity-30"
+        className="absolute inset-0 opacity-10"
         style={{
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 100%)',
+          backgroundImage: 'linear-gradient(rgba(34,211,238,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,0.3) 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
         }}
       />
 
-      <Bubbles />
-
+      {/* Floor / ground plane */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-12"
+        className="absolute bottom-0 left-0 right-0 h-14"
         style={{
-          background: 'linear-gradient(180deg, transparent 0%, rgba(194,165,132,0.4) 50%, rgba(161,130,100,0.6) 100%)',
+          background: 'linear-gradient(180deg, transparent 0%, rgba(30,41,59,0.8) 40%, rgba(15,23,42,0.95) 100%)',
+          borderTop: '1px solid rgba(34,211,238,0.15)',
         }}
       />
 
-      <Seaweed xPercent={12} height={100} />
-      <Seaweed xPercent={25} height={70} />
-      <Seaweed xPercent={75} height={90} />
-      <Seaweed xPercent={88} height={60} />
+      <DataParticles />
 
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-cyan-300 text-sm">Loading sprites...</div>
+          <div className="text-cyan-300 text-sm">Loading agents...</div>
         </div>
       )}
 
@@ -314,7 +311,7 @@ function AquariumScene() {
       {collisionBubbles.map(bubble => (
         <div
           key={bubble.id}
-          className="absolute rounded-full bg-white/40 border border-white/60"
+          className="absolute rounded-full bg-cyan-400/40 border border-cyan-300/60"
           style={{
             left: bubble.x - bubble.size / 2,
             top: bubble.y - bubble.size / 2,
@@ -325,10 +322,11 @@ function AquariumScene() {
         />
       ))}
 
+      {/* Subtle light overlay */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%)',
+          background: 'radial-gradient(ellipse at 50% 0%, rgba(34,211,238,0.08) 0%, transparent 60%)',
         }}
       />
     </div>
@@ -397,79 +395,49 @@ function SpriteCharacter({ character }: { character: CharacterState }) {
   );
 }
 
-function Bubbles() {
-  const [bubbles, setBubbles] = useState<{ id: number; x: number; y: number; size: number; speed: number }[]>([]);
+function DataParticles() {
+  const [particles, setParticles] = useState<{ id: number; x: number; y: number; size: number; speed: number; opacity: number }[]>([]);
   const idRef = useRef(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setBubbles(prev => {
-        const newBubbles = [...prev];
-        if (Math.random() < 0.3) {
-          newBubbles.push({
+      setParticles(prev => {
+        const updated = [...prev];
+        if (Math.random() < 0.25) {
+          updated.push({
             id: idRef.current++,
             x: Math.random() * 100,
-            y: 100,
-            size: Math.random() * 6 + 2,
-            speed: Math.random() * 0.5 + 0.3,
+            y: 105,
+            size: Math.random() * 3 + 1,
+            speed: Math.random() * 0.4 + 0.2,
+            opacity: Math.random() * 0.5 + 0.2,
           });
         }
-        return newBubbles
-          .map(b => ({ ...b, y: b.y - b.speed, x: b.x + Math.sin(b.y * 0.1) * 0.2 }))
-          .filter(b => b.y > -10);
+        return updated
+          .map(p => ({ ...p, y: p.y - p.speed, opacity: p.opacity - 0.003 }))
+          .filter(p => p.y > -5 && p.opacity > 0);
       });
-    }, 50);
+    }, 60);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
     <>
-      {bubbles.map(bubble => (
+      {particles.map(p => (
         <div
-          key={bubble.id}
-          className="absolute rounded-full bg-white/20 border border-white/30"
+          key={p.id}
+          className="absolute rounded-full bg-cyan-400"
           style={{
-            left: `${bubble.x}%`,
-            top: `${bubble.y}%`,
-            width: bubble.size,
-            height: bubble.size,
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: p.size,
+            height: p.size,
+            opacity: p.opacity,
           }}
         />
       ))}
     </>
-  );
-}
-
-function Seaweed({ xPercent, height }: { xPercent: number; height: number }) {
-  const [sway, setSway] = useState(0);
-
-  useEffect(() => {
-    let phase = Math.random() * Math.PI * 2;
-    const interval = setInterval(() => {
-      phase += 0.05;
-      setSway(Math.sin(phase) * 10);
-    }, 50);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <svg
-      className="absolute bottom-3"
-      style={{ left: `${xPercent}%` }}
-      width="30"
-      height={height}
-      viewBox={`0 0 30 ${height}`}
-    >
-      <path
-        d={`M 15 ${height} Q ${15 + sway * 0.5} ${height * 0.6} ${15 + sway} ${height * 0.3} Q ${15 + sway * 0.7} ${height * 0.1} ${15 + sway * 0.3} 0`}
-        stroke="#22c55e"
-        strokeWidth="6"
-        fill="none"
-        strokeLinecap="round"
-        opacity={0.7}
-      />
-    </svg>
   );
 }
 
@@ -541,7 +509,7 @@ function App() {
         </div>
 
         <div className="max-w-4xl mx-auto mb-10">
-          <AquariumScene />
+          <WorkspaceScene />
         </div>
 
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">

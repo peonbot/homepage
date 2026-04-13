@@ -5,6 +5,7 @@ import RunHQPage from './pages/RunHQPage';
 import WidgetPage from './pages/WidgetPage';
 import PricingPage from './pages/PricingPage';
 import ProjectPage from './pages/ProjectPage';
+import ProjectsPage from './pages/ProjectsPage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -158,6 +159,7 @@ function Layout() {
         <Route path="/runhq" element={<RunHQPage />} />
         <Route path="/widget" element={<WidgetPage />} />
         <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/project/:slug" element={<ProjectPage />} />
       </Routes>
     </div>

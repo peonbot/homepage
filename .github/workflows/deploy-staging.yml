@@ -26,6 +26,8 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          VITE_API_URL: https://console-staging.runhq.io
 
       - name: Deploy to Cloudflare Pages
         run: npx wrangler pages deploy dist --project-name=runhq-homepage-staging --branch=main --commit-dirty=true

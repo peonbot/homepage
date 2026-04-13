@@ -8,7 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "deploy:staging": "npm run build && npx wrangler pages deploy dist --project-name=runhq-homepage-staging --branch=main --commit-dirty=true",
+    "deploy:production": "npm run build && npx wrangler pages deploy dist --project-name=fishtank-homepage --branch=main --commit-dirty=true"
   },
   "dependencies": {
     "@react-three/drei": "9.88.17",

@@ -21,6 +21,13 @@ interface TicketDetail {
     body: string;
     authorName: string | null;
     createdAt: string;
+    attachments?: Array<{
+      id?: string;
+      filename?: string;
+      originalName?: string | null;
+      mimeType?: string;
+      url?: string | null;
+    }> | null;
   }>;
   activity: Array<{
     id: string;
@@ -29,6 +36,13 @@ interface TicketDetail {
     createdByName?: string | null;
     createdAt: string;
     metadata?: Record<string, unknown> | null;
+    attachments?: Array<{
+      id?: string;
+      filename?: string;
+      originalName?: string | null;
+      mimeType?: string;
+      url?: string | null;
+    }> | null;
   }>;
 }
 
@@ -49,6 +63,11 @@ const STATUS_LABELS: Record<string, string> = {
   done: 'Done',
   cancelled: 'Cancelled',
 };
+
+function isImageAttachment(attachment: { mimeType?: string; filename?: string }) {
+  if (attachment.mimeType) return attachment.mimeType.startsWith('image/');
+  return !!attachment.filename?.match(/\.(png|jpe?g|gif|webp|svg)$/i);
+}
 
 export default function ProjectPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -252,6 +271,33 @@ export default function ProjectPage() {
                             </span>
                           </div>
                           <p className="text-sm text-slate-300 whitespace-pre-wrap">{comment.body}</p>
+                          {(comment.attachments?.length ?? 0) > 0 && (
+                            <div className="flex flex-wrap gap-2 mt-3">
+                              {comment.attachments!.map((attachment) => (
+                                attachment.url ? (
+                                  <a
+                                    key={attachment.id || attachment.url || attachment.filename}
+                                    href={attachment.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="block"
+                                  >
+                                    {isImageAttachment(attachment) ? (
+                                      <img
+                                        src={attachment.url}
+                                        alt={attachment.originalName || attachment.filename || 'attachment'}
+                                        className="w-16 h-16 object-cover rounded-lg border border-slate-700"
+                                      />
+                                    ) : (
+                                      <div className="px-3 py-2 rounded-lg border border-slate-700 text-xs text-slate-300 hover:border-cyan-500/50">
+                                        {attachment.originalName || attachment.filename || 'Attachment'}
+                                      </div>
+                                    )}
+                                  </a>
+                                ) : null
+                              ))}
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -269,6 +315,33 @@ export default function ProjectPage() {
                       {selectedTicketDetail.activity.map((entry) => (
                         <div key={entry.id} className="rounded-xl border border-slate-800 bg-slate-950/40 p-4">
                           <div className="text-sm text-slate-200">{renderActivityLabel(entry)}</div>
+                          {(entry.attachments?.length ?? 0) > 0 && (
+                            <div className="flex flex-wrap gap-2 mt-3">
+                              {entry.attachments!.map((attachment) => (
+                                attachment.url ? (
+                                  <a
+                                    key={attachment.id || attachment.url || attachment.filename}
+                                    href={attachment.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="block"
+                                  >
+                                    {isImageAttachment(attachment) ? (
+                                      <img
+                                        src={attachment.url}
+                                        alt={attachment.originalName || attachment.filename || 'attachment'}
+                                        className="w-16 h-16 object-cover rounded-lg border border-slate-700"
+                                      />
+                                    ) : (
+                                      <div className="px-3 py-2 rounded-lg border border-slate-700 text-xs text-slate-300 hover:border-cyan-500/50">
+                                        {attachment.originalName || attachment.filename || 'Attachment'}
+                                      </div>
+                                    )}
+                                  </a>
+                                ) : null
+                              ))}
+                            </div>
+                          )}
                           <div className="text-xs text-slate-500 mt-2">
                             {new Date(entry.createdAt).toLocaleString()}
                           </div>

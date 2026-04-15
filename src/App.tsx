@@ -5,6 +5,7 @@ import RunHQPage from './pages/RunHQPage';
 import WidgetPage from './pages/WidgetPage';
 import PricingPage from './pages/PricingPage';
 import ProjectPage from './pages/ProjectPage';
+import ProjectTaskPage from './pages/ProjectTaskPage';
 import ProjectsPage from './pages/ProjectsPage';
 
 function ScrollToTop() {
@@ -161,6 +162,7 @@ function Layout() {
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/project/:slug" element={<ProjectPage />} />
+        <Route path="/project/:slug/task/:ticketId" element={<ProjectTaskPage />} />
       </Routes>
     </div>
   );

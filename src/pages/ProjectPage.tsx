@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://console.runhq.io';
 
@@ -12,38 +12,6 @@ interface Ticket {
   yesVotes: number;
   noVotes: number;
   createdAt: string;
-}
-
-interface TicketDetail {
-  ticket: Ticket;
-  comments: Array<{
-    id: string;
-    body: string;
-    authorName: string | null;
-    createdAt: string;
-    attachments?: Array<{
-      id?: string;
-      filename?: string;
-      originalName?: string | null;
-      mimeType?: string;
-      url?: string | null;
-    }> | null;
-  }>;
-  activity: Array<{
-    id: string;
-    type: string;
-    content?: string | null;
-    createdByName?: string | null;
-    createdAt: string;
-    metadata?: Record<string, unknown> | null;
-    attachments?: Array<{
-      id?: string;
-      filename?: string;
-      originalName?: string | null;
-      mimeType?: string;
-      url?: string | null;
-    }> | null;
-  }>;
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -64,20 +32,12 @@ const STATUS_LABELS: Record<string, string> = {
   cancelled: 'Cancelled',
 };
 
-function isImageAttachment(attachment: { mimeType?: string; filename?: string }) {
-  if (attachment.mimeType) return attachment.mimeType.startsWith('image/');
-  return !!attachment.filename?.match(/\.(png|jpe?g|gif|webp|svg)$/i);
-}
-
 export default function ProjectPage() {
   const { slug } = useParams<{ slug: string }>();
   const [projectName, setProjectName] = useState('');
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
-  const [selectedTicketDetail, setSelectedTicketDetail] = useState<TicketDetail | null>(null);
-  const [detailLoading, setDetailLoading] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
@@ -101,52 +61,6 @@ export default function ProjectPage() {
         setLoading(false);
       });
   }, [slug]);
-
-  useEffect(() => {
-    if (!slug || !selectedTicketId) {
-      setSelectedTicketDetail(null);
-      return;
-    }
-
-    setDetailLoading(true);
-    fetch(`${API_URL}/api/widget/tickets/${selectedTicketId}`, {
-      headers: { 'X-RW-Project': slug },
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          setSelectedTicketDetail(null);
-          setDetailLoading(false);
-          return;
-        }
-        const data = await res.json();
-        setSelectedTicketDetail(data);
-        setDetailLoading(false);
-      })
-      .catch(() => {
-        setSelectedTicketDetail(null);
-        setDetailLoading(false);
-      });
-  }, [slug, selectedTicketId]);
-
-  const renderActivityLabel = (entry: TicketDetail['activity'][number]) => {
-    const actor = entry.createdByName || 'Someone';
-    switch (entry.type) {
-      case 'task_created':
-        return `${actor} created this task`;
-      case 'status_change':
-        return `${actor} changed status${entry.metadata?.to ? ` to ${String(entry.metadata.to).replaceAll('_', ' ')}` : ''}`;
-      case 'agent_assigned':
-        return `${actor} assigned ${entry.metadata?.agentName ? String(entry.metadata.agentName) : 'an agent'}`;
-      case 'task_archived':
-        return `${actor} archived this task`;
-      case 'task_unarchived':
-        return `${actor} unarchived this task`;
-      case 'task_deleted':
-        return `${actor} deleted this task`;
-      default:
-        return entry.content || `${actor} updated this task`;
-    }
-  };
 
   if (loading) {
     return (
@@ -177,11 +91,10 @@ export default function ProjectPage() {
       ) : (
         <div className="space-y-4">
           {tickets.map((ticket) => (
-            <button
+            <Link
               key={ticket.id}
-              type="button"
-              onClick={() => setSelectedTicketId(ticket.id)}
-              className="w-full text-left bg-slate-800/50 border border-slate-700/50 rounded-xl p-6 hover:border-cyan-500/40 hover:bg-slate-800/70 transition-colors"
+              to={`/project/${slug}/task/${ticket.id}`}
+              className="block w-full text-left bg-slate-800/50 border border-slate-700/50 rounded-xl p-6 hover:border-cyan-500/40 hover:bg-slate-800/70 transition-colors"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
@@ -214,145 +127,8 @@ export default function ProjectPage() {
                   </span>
                 )}
               </div>
-            </button>
+            </Link>
           ))}
-        </div>
-      )}
-
-      {selectedTicketId && (
-        <div
-          className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setSelectedTicketId(null)}
-        >
-          <div
-            className="w-full max-w-3xl max-h-[85vh] overflow-y-auto bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="px-6 py-5 border-b border-slate-800 flex items-start justify-between gap-4">
-              <div>
-                <h2 className="text-xl font-semibold text-white">
-                  {selectedTicketDetail?.ticket.title || 'Loading task...'}
-                </h2>
-                {selectedTicketDetail?.ticket.description && (
-                  <p className="text-slate-400 mt-2 whitespace-pre-wrap">
-                    {selectedTicketDetail.ticket.description}
-                  </p>
-                )}
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelectedTicketId(null)}
-                className="text-slate-400 hover:text-white transition-colors"
-              >
-                ✕
-              </button>
-            </div>
-
-            {detailLoading || !selectedTicketDetail ? (
-              <div className="px-6 py-10 text-center text-slate-400">Loading details...</div>
-            ) : (
-              <div className="grid md:grid-cols-2 gap-0">
-                <div className="px-6 py-5 border-b md:border-b-0 md:border-r border-slate-800">
-                  <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400 mb-4">
-                    Comments ({selectedTicketDetail.comments.length})
-                  </h3>
-                  {selectedTicketDetail.comments.length === 0 ? (
-                    <p className="text-slate-500 text-sm">No comments yet.</p>
-                  ) : (
-                    <div className="space-y-4">
-                      {selectedTicketDetail.comments.map((comment) => (
-                        <div key={comment.id} className="rounded-xl border border-slate-800 bg-slate-950/40 p-4">
-                          <div className="flex items-center justify-between gap-3 mb-2">
-                            <span className="text-sm font-medium text-white">
-                              {comment.authorName || 'Anonymous'}
-                            </span>
-                            <span className="text-xs text-slate-500">
-                              {new Date(comment.createdAt).toLocaleString()}
-                            </span>
-                          </div>
-                          <p className="text-sm text-slate-300 whitespace-pre-wrap">{comment.body}</p>
-                          {(comment.attachments?.length ?? 0) > 0 && (
-                            <div className="flex flex-wrap gap-2 mt-3">
-                              {comment.attachments!.map((attachment) => (
-                                attachment.url ? (
-                                  <a
-                                    key={attachment.id || attachment.url || attachment.filename}
-                                    href={attachment.url}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="block"
-                                  >
-                                    {isImageAttachment(attachment) ? (
-                                      <img
-                                        src={attachment.url}
-                                        alt={attachment.originalName || attachment.filename || 'attachment'}
-                                        className="w-16 h-16 object-cover rounded-lg border border-slate-700"
-                                      />
-                                    ) : (
-                                      <div className="px-3 py-2 rounded-lg border border-slate-700 text-xs text-slate-300 hover:border-cyan-500/50">
-                                        {attachment.originalName || attachment.filename || 'Attachment'}
-                                      </div>
-                                    )}
-                                  </a>
-                                ) : null
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div className="px-6 py-5">
-                  <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400 mb-4">
-                    Activity ({selectedTicketDetail.activity.length})
-                  </h3>
-                  {selectedTicketDetail.activity.length === 0 ? (
-                    <p className="text-slate-500 text-sm">No activity yet.</p>
-                  ) : (
-                    <div className="space-y-3">
-                      {selectedTicketDetail.activity.map((entry) => (
-                        <div key={entry.id} className="rounded-xl border border-slate-800 bg-slate-950/40 p-4">
-                          <div className="text-sm text-slate-200">{renderActivityLabel(entry)}</div>
-                          {(entry.attachments?.length ?? 0) > 0 && (
-                            <div className="flex flex-wrap gap-2 mt-3">
-                              {entry.attachments!.map((attachment) => (
-                                attachment.url ? (
-                                  <a
-                                    key={attachment.id || attachment.url || attachment.filename}
-                                    href={attachment.url}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="block"
-                                  >
-                                    {isImageAttachment(attachment) ? (
-                                      <img
-                                        src={attachment.url}
-                                        alt={attachment.originalName || attachment.filename || 'attachment'}
-                                        className="w-16 h-16 object-cover rounded-lg border border-slate-700"
-                                      />
-                                    ) : (
-                                      <div className="px-3 py-2 rounded-lg border border-slate-700 text-xs text-slate-300 hover:border-cyan-500/50">
-                                        {attachment.originalName || attachment.filename || 'Attachment'}
-                                      </div>
-                                    )}
-                                  </a>
-                                ) : null
-                              ))}
-                            </div>
-                          )}
-                          <div className="text-xs text-slate-500 mt-2">
-                            {new Date(entry.createdAt).toLocaleString()}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
         </div>
       )}
     </div>

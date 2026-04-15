@@ -94,37 +94,38 @@ export default function ProjectPage() {
             <Link
               key={ticket.id}
               to={`/project/${slug}/proposals/${ticket.id}`}
-              className="block w-full text-left bg-slate-800/50 border border-slate-700/50 rounded-xl p-6 hover:border-cyan-500/40 hover:bg-slate-800/70 transition-colors"
+              className="flex items-stretch bg-slate-800/50 border border-slate-700/50 rounded-xl hover:border-cyan-500/40 hover:bg-slate-800/70 transition-colors"
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-semibold text-white mb-1">{ticket.title}</h3>
-                  {ticket.description && (
-                    <p className="text-slate-400 text-sm line-clamp-3">{ticket.description}</p>
-                  )}
-                </div>
-                <span className={`shrink-0 px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_COLORS[ticket.status] || STATUS_COLORS.pending}`}>
-                  {STATUS_LABELS[ticket.status] || ticket.status}
+              <div className="flex flex-col items-center justify-center px-4 py-4 border-r border-slate-700/50 min-w-[3.5rem]">
+                <svg className={`w-4 h-4 ${ticket.yesVotes - ticket.noVotes > 0 ? 'text-emerald-400' : 'text-slate-500'}`} viewBox="0 0 16 8" fill="currentColor">
+                  <path d="M8 0l8 8H0z" />
+                </svg>
+                <span className={`text-base font-bold my-1 ${ticket.yesVotes - ticket.noVotes > 0 ? 'text-emerald-400' : 'text-slate-400'}`}>
+                  {ticket.yesVotes - ticket.noVotes}
                 </span>
+                <svg className="w-4 h-4 text-slate-500" viewBox="0 0 16 8" fill="currentColor">
+                  <path d="M8 8L0 0h16z" />
+                </svg>
               </div>
 
-              <div className="flex items-center gap-4 mt-4 text-sm text-slate-400">
-                <span className="flex items-center gap-1" title="Yes votes">
-                  <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z" />
-                  </svg>
-                  {ticket.yesVotes}
-                </span>
-                <span className="flex items-center gap-1" title="No votes">
-                  <svg className="w-4 h-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 15V19a3 3 0 003 3l4-9V2H5.72a2 2 0 00-2 1.7l-1.38 9a2 2 0 002 2.3H10z" />
-                  </svg>
-                  {ticket.noVotes}
-                </span>
-                {ticket.source && (
-                  <span className="text-xs uppercase tracking-wide text-slate-500">
-                    {ticket.source === 'workspace' ? 'Workspace' : 'Widget'}
+              <div className="flex-1 min-w-0 p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-lg font-semibold text-white mb-1">{ticket.title}</h3>
+                    {ticket.description && (
+                      <p className="text-slate-400 text-sm line-clamp-3">{ticket.description}</p>
+                    )}
+                  </div>
+                  <span className={`shrink-0 px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_COLORS[ticket.status] || STATUS_COLORS.pending}`}>
+                    {STATUS_LABELS[ticket.status] || ticket.status}
                   </span>
+                </div>
+                {ticket.source && (
+                  <div className="mt-3 text-sm">
+                    <span className="text-xs uppercase tracking-wide text-slate-500">
+                      {ticket.source === 'workspace' ? 'Workspace' : 'Widget'}
+                    </span>
+                  </div>
                 )}
               </div>
             </Link>

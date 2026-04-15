@@ -255,7 +255,15 @@ export default function ProjectTaskPage() {
           </div>
 
           <div className="flex items-center gap-4 mt-5 text-sm text-slate-400">
-            <span>{detail.ticket.yesVotes} upvotes</span>
+            <span className="inline-flex items-center gap-2">
+              <svg className={`w-3.5 h-3.5 ${detail.ticket.yesVotes - detail.ticket.noVotes > 0 ? 'text-emerald-400' : 'text-slate-500'}`} viewBox="0 0 16 8" fill="currentColor">
+                <path d="M8 0l8 8H0z" />
+              </svg>
+              <span className={`font-bold ${detail.ticket.yesVotes - detail.ticket.noVotes > 0 ? 'text-emerald-400' : 'text-slate-400'}`}>
+                {detail.ticket.yesVotes - detail.ticket.noVotes}
+              </span>
+              <span>upvotes</span>
+            </span>
             {detail.ticket.source && (
               <span className="text-xs uppercase tracking-wide text-slate-500">
                 {detail.ticket.source === 'workspace' ? 'Workspace' : 'Widget'}

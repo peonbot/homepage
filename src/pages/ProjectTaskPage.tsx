@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import ImageLightbox from '../components/ImageLightbox';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://console.runhq.io';
 
@@ -87,33 +88,51 @@ function isImageAttachment(attachment: Attachment) {
 }
 
 function AttachmentList({ attachments }: { attachments?: Attachment[] | null }) {
+  const [lightboxUrl, setLightboxUrl] = useState<{ src: string; alt: string } | null>(null);
+
   if (!attachments?.length) return null;
   return (
-    <div className="flex flex-wrap gap-2 mt-3">
-      {attachments.map((attachment) => (
-        attachment.url ? (
-          <a
-            key={attachment.id || attachment.url || attachment.filename}
-            href={attachment.url}
-            target="_blank"
-            rel="noreferrer"
-            className="block"
-          >
-            {isImageAttachment(attachment) ? (
-              <img
-                src={attachment.url}
-                alt={attachment.originalName || attachment.filename || 'attachment'}
-                className="w-16 h-16 object-cover rounded-lg border border-slate-700"
-              />
+    <>
+      <div className="flex flex-wrap gap-2 mt-3">
+        {attachments.map((attachment) => (
+          attachment.url ? (
+            isImageAttachment(attachment) ? (
+              <button
+                key={attachment.id || attachment.url || attachment.filename}
+                type="button"
+                onClick={() => setLightboxUrl({ src: attachment.url!, alt: attachment.originalName || attachment.filename || 'attachment' })}
+                className="block cursor-pointer"
+              >
+                <img
+                  src={attachment.url}
+                  alt={attachment.originalName || attachment.filename || 'attachment'}
+                  className="w-16 h-16 object-cover rounded-lg border border-slate-700"
+                />
+              </button>
             ) : (
-              <div className="px-3 py-2 rounded-lg border border-slate-700 text-xs text-slate-300 hover:border-cyan-500/50">
-                {attachment.originalName || attachment.filename || 'Attachment'}
-              </div>
-            )}
-          </a>
-        ) : null
-      ))}
-    </div>
+              <a
+                key={attachment.id || attachment.url || attachment.filename}
+                href={attachment.url}
+                target="_blank"
+                rel="noreferrer"
+                className="block"
+              >
+                <div className="px-3 py-2 rounded-lg border border-slate-700 text-xs text-slate-300 hover:border-cyan-500/50">
+                  {attachment.originalName || attachment.filename || 'Attachment'}
+                </div>
+              </a>
+            )
+          ) : null
+        ))}
+      </div>
+      {lightboxUrl && (
+        <ImageLightbox
+          src={lightboxUrl.src}
+          alt={lightboxUrl.alt}
+          onClose={() => setLightboxUrl(null)}
+        />
+      )}
+    </>
   );
 }
 

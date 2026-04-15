@@ -162,6 +162,7 @@ function Layout() {
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/project/:slug" element={<ProjectPage />} />
+        <Route path="/project/:slug/proposals/:ticketId" element={<ProjectTaskPage />} />
         <Route path="/project/:slug/task/:ticketId" element={<ProjectTaskPage />} />
       </Routes>
     </div>

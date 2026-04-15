@@ -93,7 +93,7 @@ export default function ProjectPage() {
           {tickets.map((ticket) => (
             <Link
               key={ticket.id}
-              to={`/project/${slug}/task/${ticket.id}`}
+              to={`/project/${slug}/proposals/${ticket.id}`}
               className="block w-full text-left bg-slate-800/50 border border-slate-700/50 rounded-xl p-6 hover:border-cyan-500/40 hover:bg-slate-800/70 transition-colors"
             >
               <div className="flex items-start justify-between gap-4">

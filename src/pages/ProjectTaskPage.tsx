@@ -12,6 +12,7 @@ interface Ticket {
   yesVotes: number;
   noVotes: number;
   createdAt: string;
+  attachments?: Attachment[] | null;
 }
 
 interface Attachment {
@@ -227,6 +228,7 @@ export default function ProjectTaskPage() {
               {detail.ticket.description && (
                 <p className="text-slate-400 mt-3 whitespace-pre-wrap">{detail.ticket.description}</p>
               )}
+              <AttachmentList attachments={detail.ticket.attachments} />
             </div>
             <span className={`shrink-0 px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_COLORS[detail.ticket.status] || STATUS_COLORS.pending}`}>
               {STATUS_LABELS[detail.ticket.status] || detail.ticket.status}

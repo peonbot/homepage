@@ -42,9 +42,9 @@ Output is generated in the `dist/` directory.
 
 ## Deployment
 
-Deployed via **Cloudflare Pages** (project: `runhq`). Pushing to `main` triggers an automatic build and deploy.
+Deployed via **Cloudflare Pages** (project: `fishtank-homepage`). Requires manual deploy via `npx wrangler pages deploy dist --project-name=fishtank-homepage`.
 
-- **Custom domain**: `www.runhq.com` (CNAME → `runhq.pages.dev`)
+- **Custom domain**: `runhq.io` (CNAME → `fishtank-9xf.pages.dev`)
 - **Build command**: `npm run build`
 - **Output directory**: `dist`
 

@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import RunHQPage from './pages/RunHQPage';
 import WidgetPage from './pages/WidgetPage';
-import PricingPage from './pages/PricingPage';
 import ProjectPage from './pages/ProjectPage';
 import ProjectTaskPage from './pages/ProjectTaskPage';
 import ProjectsPage from './pages/ProjectsPage';
@@ -78,10 +77,6 @@ function Layout() {
                     </div>
                   )}
                 </div>
-
-                <Link to="/pricing" className="text-sm text-slate-300 hover:text-white transition-colors">
-                  Pricing
-                </Link>
               </div>
             </div>
 
@@ -139,14 +134,6 @@ function Layout() {
                 </div>
               )}
 
-              <Link
-                to="/pricing"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 text-sm text-slate-300 hover:text-white transition-colors rounded-lg hover:bg-slate-800/50"
-              >
-                Pricing
-              </Link>
-
               <a href="https://app.runhq.io" className="mt-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm text-center">
                 Login
               </a>
@@ -159,7 +146,7 @@ function Layout() {
         <Route path="/" element={<HomePage />} />
         <Route path="/runhq" element={<RunHQPage />} />
         <Route path="/widget" element={<WidgetPage />} />
-        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/pricing" element={<Navigate to="/" replace />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/project/:slug" element={<ProjectPage />} />
         <Route path="/project/:slug/proposals/:ticketId" element={<ProjectTaskPage />} />

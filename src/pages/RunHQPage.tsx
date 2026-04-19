@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 
 export default function RunHQPage() {
   return (
@@ -119,9 +118,6 @@ export default function RunHQPage() {
             <a href="https://forms.gle/imCy2kktZUhvrWfA8" className="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
               Request access
             </a>
-            <Link to="/pricing" className="px-8 py-3 border border-slate-600 hover:border-slate-500 text-white rounded-lg transition-colors text-sm">
-              View pricing
-            </Link>
           </div>
         </div>
       </section>

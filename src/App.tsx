@@ -20,6 +20,8 @@ function Layout() {
   const [productsOpen, setProductsOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { pathname } = useLocation();
+  const isHome = pathname === '/';
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -30,6 +32,14 @@ function Layout() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  if (isHome) {
+    return (
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+      </Routes>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">

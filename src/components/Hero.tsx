@@ -4,20 +4,6 @@ import * as THREE from 'three';
 const SIGNUP_URL = 'https://forms.gle/imCy2kktZUhvrWfA8';
 const LOGIN_URL = 'https://app.runhq.io';
 
-type SignalKind = 'bug' | 'feat' | 'fb';
-type Signal = { k: SignalKind; txt: string; who: string };
-
-const SIGNALS: Signal[] = [
-  { k: 'bug',  txt: 'Checkout misaligned on iOS 17',  who: 'web/checkout' },
-  { k: 'feat', txt: 'Bulk-edit saved addresses',      who: 'accounts' },
-  { k: 'fb',   txt: 'Onboarding step 3 confusing',    who: 'onboarding' },
-  { k: 'bug',  txt: 'Keyboard skips filter chips',    who: 'ui-kit' },
-  { k: 'feat', txt: 'Export CSV from reports',        who: 'reports' },
-  { k: 'fb',   txt: 'Autosave should be default',     who: 'editor' },
-  { k: 'bug',  txt: 'Race on first-run config fetch', who: 'core' },
-  { k: 'feat', txt: 'Slack thread → patch PR',        who: 'connect' },
-];
-
 const PALETTE = {
   A:  [0.22, 0.95, 0.85],
   B:  [0.55, 1.00, 0.55],
@@ -123,10 +109,6 @@ const SPEED = 0.45;
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const idRef = useRef(SIGNALS.slice(0, 4).length);
-  const [feed, setFeed] = useState<Array<Signal & { id: number }>>(() =>
-    SIGNALS.slice(0, 4).map((s, i) => ({ ...s, id: i }))
-  );
   const [telemetry, setTelemetry] = useState({ gen: 2847, sigs: 42, cycle: 0 });
 
   useEffect(() => {
@@ -200,15 +182,6 @@ export default function Hero() {
   }, []);
 
   useEffect(() => {
-    let idx = 4;
-    const id = setInterval(() => {
-      const s = SIGNALS[idx++ % SIGNALS.length];
-      setFeed(prev => [{ ...s, id: idRef.current++ }, ...prev].slice(0, 5));
-    }, 3400);
-    return () => clearInterval(id);
-  }, []);
-
-  useEffect(() => {
     const id = setInterval(() => {
       setTelemetry(prev => {
         const cycle = (prev.cycle + 1) % 60;
@@ -231,11 +204,8 @@ export default function Hero() {
           <span>RunHQ</span>
         </div>
         <nav className="rh-nav">
-          <a href="#products">Product</a>
-          <a href="#demo">How it works</a>
-          <a href="#products">Agents</a>
+          <a href="#products">Products</a>
           <a href="#about">Docs</a>
-          <a href="#about">Changelog</a>
         </nav>
         <div className="rh-top-right">
           <span className="rh-pill">
@@ -246,43 +216,6 @@ export default function Hero() {
         </div>
       </header>
 
-      <aside className="rh-margin rh-margin-left" aria-hidden="true">
-        <div className="rh-margin-title mono">Incoming feedback</div>
-        {feed.map(sig => (
-          <div key={sig.id} className={'rh-signal rh-signal-' + sig.k}>
-            <span className="rh-signal-kind" />
-            <div>
-              <div>{sig.txt}</div>
-              <span className="rh-signal-meta mono">{sig.who}</span>
-            </div>
-          </div>
-        ))}
-      </aside>
-
-      <aside className="rh-margin rh-margin-right" aria-hidden="true">
-        <div className="rh-margin-title mono">Agents on task</div>
-        <div className="rh-agent">
-          <div><div className="rh-agent-name">route-01 · planner</div><div className="rh-agent-task mono">triaging #4421</div></div>
-          <div className="rh-agent-busy" />
-        </div>
-        <div className="rh-agent">
-          <div><div className="rh-agent-name">forge-04 · coder</div><div className="rh-agent-task mono">patching checkout/ios</div></div>
-          <div className="rh-agent-busy" />
-        </div>
-        <div className="rh-agent">
-          <div><div className="rh-agent-name">forge-07 · coder</div><div className="rh-agent-task mono">adding autosave flag</div></div>
-          <div className="rh-agent-busy" />
-        </div>
-        <div className="rh-agent">
-          <div><div className="rh-agent-name">verify-02 · tests</div><div className="rh-agent-task mono">running suite 4/17</div></div>
-          <div className="rh-agent-busy" />
-        </div>
-        <div className="rh-agent rh-agent-idle">
-          <div><div className="rh-agent-name">reviewer-01 · human</div><div className="rh-agent-task mono">awaiting PR #982</div></div>
-          <div className="rh-agent-busy" />
-        </div>
-      </aside>
-
       <div className="rh-copy">
         <h1 className="rh-tagline">Let your product <em>evolve.</em></h1>
         <p className="rh-sub">
@@ -291,9 +224,8 @@ export default function Hero() {
         </p>
         <div className="rh-ctas">
           <a className="rh-btn rh-btn-primary" href={SIGNUP_URL}>
-            Start routing feedback <span aria-hidden="true">→</span>
+            Sign up <span aria-hidden="true">→</span>
           </a>
-          <a className="rh-btn rh-btn-ghost" href="#demo">See it evolve</a>
         </div>
       </div>
 
@@ -468,66 +400,6 @@ const HERO_STYLES = `
   }
   .rh-btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* Marginalia */
-  .rh-margin {
-    position: absolute;
-    top: 50%; transform: translateY(-50%);
-    z-index: 4;
-    width: 240px;
-    pointer-events: none;
-  }
-  .rh-margin-left  { left: 32px; }
-  .rh-margin-right { right: 32px; }
-
-  .rh-margin-title {
-    font-size: 10px; color: var(--ink-faint);
-    letter-spacing: 0.14em; text-transform: uppercase;
-    margin-bottom: 12px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .rh-margin-left  .rh-margin-title::before { content: ""; width: 14px; height: 1px; background: var(--line); }
-  .rh-margin-right .rh-margin-title { justify-content: flex-end; flex-direction: row-reverse; }
-  .rh-margin-right .rh-margin-title::after  { content: ""; width: 14px; height: 1px; background: var(--line); }
-
-  .rh-signal {
-    display: grid; grid-template-columns: 8px 1fr; gap: 10px;
-    padding: 10px 0;
-    border-top: 1px solid var(--line);
-    font-size: 11.5px; color: var(--ink);
-    opacity: 0; transform: translateX(-8px);
-    animation: rh-slide-in .5s cubic-bezier(.2,.7,.3,1) forwards;
-  }
-  .rh-signal-kind {
-    width: 6px; height: 6px; border-radius: 50%;
-    margin-top: 5px;
-    background: var(--accent-2);
-    box-shadow: 0 0 8px currentColor;
-  }
-  .rh-signal-bug  .rh-signal-kind { background: oklch(0.7 0.2 25);  color: oklch(0.7 0.2 25); }
-  .rh-signal-feat .rh-signal-kind { background: var(--accent);      color: var(--accent); }
-  .rh-signal-fb   .rh-signal-kind { background: var(--accent-3);    color: var(--accent-3); }
-  .rh-signal-meta { color: var(--ink-faint); font-size: 10px; margin-top: 3px; display: block; }
-  @keyframes rh-slide-in { to { opacity: 1; transform: translateX(0); } }
-
-  .rh-agent {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 8px;
-    padding: 10px 0;
-    border-top: 1px solid var(--line);
-    font-size: 11.5px;
-    text-align: right;
-  }
-  .rh-agent-name { color: var(--ink); }
-  .rh-agent-task { color: var(--ink-faint); font-size: 10px; margin-top: 3px; }
-  .rh-agent-busy {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--accent-2);
-    box-shadow: 0 0 8px currentColor;
-    margin-top: 5px;
-  }
-  .rh-agent-idle .rh-agent-busy { background: var(--ink-faint); box-shadow: none; }
-
   /* Bottom telemetry */
   .rh-bottom-meta {
     position: absolute;
@@ -540,9 +412,6 @@ const HERO_STYLES = `
   .rh-meta-cell { display: inline-flex; gap: 6px; align-items: center; }
   .rh-meta-val { color: var(--ink); font-variant-numeric: tabular-nums; }
 
-  @media (max-width: 1100px) {
-    .rh-margin { display: none; }
-  }
   @media (max-width: 700px) {
     .rh-nav, .rh-top-right .rh-pill { display: none; }
     .rh-bottom-meta { font-size: 9.5px; gap: 8px; flex-wrap: wrap; }

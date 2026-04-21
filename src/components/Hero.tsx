@@ -259,7 +259,7 @@ export default function Hero() {
       </header>
 
       <div className="rh-copy">
-        <h1 className="rh-tagline">Let your product <em>evolve.</em></h1>
+        <h1 className="rh-tagline"><em>Self-evolving</em> software is here.</h1>
         <p className="rh-sub">
           Route verified user feedback directly to AI coding agents.{' '}
           <strong>Zero bottlenecks. Full oversight.</strong>

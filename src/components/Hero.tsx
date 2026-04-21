@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
 
 const SIGNUP_URL = 'https://forms.gle/imCy2kktZUhvrWfA8';
 const LOGIN_URL = 'https://app.runhq.io';
@@ -40,7 +39,7 @@ float noise(vec2 p) {
 }
 float fbm(vec2 p) {
   float v = 0.0, a = 0.5;
-  for (int i=0; i<6; i++) {
+  for (int i=0; i<4; i++) {
     v += a * noise(p);
     p = p*2.02 + vec2(13.1, 7.3);
     a *= 0.5;
@@ -116,68 +115,111 @@ export default function Hero() {
     const hero = heroRef.current;
     if (!canvas || !hero) return;
 
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    let cancelled = false;
+    let cleanup: (() => void) | undefined;
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    (async () => {
+      const THREE = await import('three');
+      if (cancelled || !canvas || !hero) return;
 
-    const uniforms = {
-      uTime:      { value: 0 },
-      uRes:       { value: new THREE.Vector2(1, 1) },
-      uIntensity: { value: 1.0 },
-      uColA:      { value: new THREE.Vector3(PALETTE.A[0], PALETTE.A[1], PALETTE.A[2]) },
-      uColB:      { value: new THREE.Vector3(PALETTE.B[0], PALETTE.B[1], PALETTE.B[2]) },
-      uColC:      { value: new THREE.Vector3(PALETTE.C[0], PALETTE.C[1], PALETTE.C[2]) },
-      uColBG:     { value: new THREE.Vector3(PALETTE.BG[0], PALETTE.BG[1], PALETTE.BG[2]) },
-      uHeart:     { value: 0 },
-    };
+      let renderer: import('three').WebGLRenderer;
+      try {
+        renderer = new THREE.WebGLRenderer({
+          canvas,
+          antialias: false,
+          alpha: false,
+          powerPreference: 'low-power',
+        });
+      } catch {
+        return; // No WebGL — leave the dark background as-is.
+      }
+      renderer.setPixelRatio(1);
 
-    const mat = new THREE.ShaderMaterial({
-      uniforms,
-      vertexShader: VERT,
-      fragmentShader: FRAG,
-    });
-    const geom = new THREE.PlaneGeometry(2, 2);
-    const quad = new THREE.Mesh(geom, mat);
-    scene.add(quad);
+      const scene = new THREE.Scene();
+      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-    function resize() {
-      if (!hero) return;
-      const w = hero.clientWidth;
-      const h = hero.clientHeight;
-      renderer.setSize(w, h, false);
-      uniforms.uRes.value.set(w, h);
-    }
-    resize();
-    const ro = new ResizeObserver(resize);
-    ro.observe(hero);
+      const uniforms = {
+        uTime:      { value: 0 },
+        uRes:       { value: new THREE.Vector2(1, 1) },
+        uIntensity: { value: 1.0 },
+        uColA:      { value: new THREE.Vector3(PALETTE.A[0], PALETTE.A[1], PALETTE.A[2]) },
+        uColB:      { value: new THREE.Vector3(PALETTE.B[0], PALETTE.B[1], PALETTE.B[2]) },
+        uColC:      { value: new THREE.Vector3(PALETTE.C[0], PALETTE.C[1], PALETTE.C[2]) },
+        uColBG:     { value: new THREE.Vector3(PALETTE.BG[0], PALETTE.BG[1], PALETTE.BG[2]) },
+        uHeart:     { value: 0 },
+      };
 
-    let last = performance.now() / 1000;
-    let raf = 0;
-    function tick() {
-      const now = performance.now() / 1000;
-      const dt = Math.min(now - last, 0.05);
-      last = now;
-      uniforms.uTime.value += dt * SPEED;
+      const mat = new THREE.ShaderMaterial({
+        uniforms,
+        vertexShader: VERT,
+        fragmentShader: FRAG,
+      });
+      const geom = new THREE.PlaneGeometry(2, 2);
+      const quad = new THREE.Mesh(geom, mat);
+      scene.add(quad);
 
-      const heartCycle = 6.5;
-      const hp = (uniforms.uTime.value % heartCycle) / heartCycle;
-      const bump = (x: number, c: number, w: number) => Math.exp(-Math.pow((x - c) / w, 2));
-      const h = bump(hp, 0.05, 0.04) + 0.55 * bump(hp, 0.18, 0.06);
-      uniforms.uHeart.value = Math.min(1, h);
+      function resize() {
+        const w = hero!.clientWidth;
+        const h = hero!.clientHeight;
+        renderer.setSize(w, h, false);
+        uniforms.uRes.value.set(w, h);
+      }
+      resize();
+      const ro = new ResizeObserver(resize);
+      ro.observe(hero);
 
-      renderer.render(scene, camera);
-      raf = requestAnimationFrame(tick);
-    }
-    tick();
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      let last = performance.now() / 1000;
+      let raf = 0;
+      function tick() {
+        const now = performance.now() / 1000;
+        const dt = Math.min(now - last, 0.05);
+        last = now;
+        uniforms.uTime.value += dt * SPEED;
+
+        const heartCycle = 6.5;
+        const hp = (uniforms.uTime.value % heartCycle) / heartCycle;
+        const bump = (x: number, c: number, w: number) => Math.exp(-Math.pow((x - c) / w, 2));
+        const h = bump(hp, 0.05, 0.04) + 0.55 * bump(hp, 0.18, 0.06);
+        uniforms.uHeart.value = Math.min(1, h);
+
+        renderer.render(scene, camera);
+        raf = requestAnimationFrame(tick);
+      }
+
+      function start() {
+        if (raf || reducedMotion) return;
+        last = performance.now() / 1000;
+        raf = requestAnimationFrame(tick);
+      }
+      function stop() {
+        if (raf) cancelAnimationFrame(raf);
+        raf = 0;
+      }
+
+      // Pause when the hero scrolls out of view.
+      const io = new IntersectionObserver(([entry]) => {
+        entry.isIntersecting ? start() : stop();
+      }, { threshold: 0 });
+      io.observe(hero);
+
+      // Render exactly one frame for reduced-motion users so the canvas isn't blank.
+      if (reducedMotion) renderer.render(scene, camera);
+
+      cleanup = () => {
+        stop();
+        io.disconnect();
+        ro.disconnect();
+        mat.dispose();
+        geom.dispose();
+        renderer.dispose();
+      };
+    })();
 
     return () => {
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-      mat.dispose();
-      geom.dispose();
-      renderer.dispose();
+      cancelled = true;
+      cleanup?.();
     };
   }, []);
 

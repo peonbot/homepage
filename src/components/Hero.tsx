@@ -261,8 +261,7 @@ export default function Hero() {
       <div className="rh-copy">
         <h1 className="rh-tagline"><em>Self-evolving</em> software is here.</h1>
         <p className="rh-sub">
-          Route verified user feedback directly to AI coding agents.{' '}
-          <strong>Zero bottlenecks. Full oversight.</strong>
+          Users send feedback. Agents build. <strong>You ship.</strong>
         </p>
         <div className="rh-ctas">
           <a className="rh-btn rh-btn-primary" href={SIGNUP_URL}>

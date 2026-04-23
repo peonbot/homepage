@@ -1,6 +1,6 @@
 import Hero from '../components/Hero';
 
-const SIGNUP_URL = 'https://forms.gle/imCy2kktZUhvrWfA8';
+const SIGNUP_URL = 'https://app.runhq.io/signup';
 const LOGIN_URL = 'https://app.runhq.io';
 
 export default function HomePage() {

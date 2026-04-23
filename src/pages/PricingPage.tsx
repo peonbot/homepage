@@ -33,7 +33,7 @@ export default function PricingPage() {
             <p className="text-slate-400 text-sm mb-8">
               Custom packages based on your team's volume and integrations.
             </p>
-            <a href="https://forms.gle/imCy2kktZUhvrWfA8" className="inline-block px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
+            <a href="https://app.runhq.io/signup" className="inline-block px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
               Talk to us
             </a>
           </div>
@@ -75,7 +75,7 @@ export default function PricingPage() {
           <p className="text-slate-400 mb-8">
             We'll walk you through RunHQ and help you figure out the right package for your team.
           </p>
-          <a href="https://forms.gle/imCy2kktZUhvrWfA8" className="inline-block px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
+          <a href="https://app.runhq.io/signup" className="inline-block px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
             Talk to us
           </a>
         </div>

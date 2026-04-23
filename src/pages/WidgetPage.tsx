@@ -16,7 +16,7 @@ export default function WidgetPage() {
           <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto mb-8 leading-relaxed">
             Collect user feedback anywhere on your website and turn it into a working product instantly with agents.
           </p>
-          <a href="https://forms.gle/imCy2kktZUhvrWfA8" className="inline-block px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
+          <a href="https://app.runhq.io/signup" className="inline-block px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
             Request access
           </a>
         </div>
@@ -123,7 +123,7 @@ export default function WidgetPage() {
           <h2 className="text-3xl font-bold text-white mb-4">Close the loop on user feedback</h2>
           <p className="text-slate-400 mb-8">Stop losing feedback in spreadsheets. Start shipping what users actually want.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="https://forms.gle/imCy2kktZUhvrWfA8" className="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
+            <a href="https://app.runhq.io/signup" className="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold rounded-lg transition-colors text-sm">
               Request access
             </a>
           </div>

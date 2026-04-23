@@ -294,6 +294,7 @@ const HERO_STYLES = `
     position: relative;
     width: 100%;
     height: 100vh;
+    height: 100svh;
     min-height: 640px;
     overflow: hidden;
     background: var(--bg-deep);
@@ -379,11 +380,15 @@ const HERO_STYLES = `
   /* Center copy */
   .rh-copy {
     position: absolute;
-    left: 0; right: 0; bottom: 60px;
+    inset: 0;
     z-index: 4;
-    padding: 0 32px;
+    padding: 96px 32px 72px;
     text-align: center;
     pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
   .rh-copy > * { pointer-events: auto; }
   .rh-tagline {
@@ -454,7 +459,11 @@ const HERO_STYLES = `
   .rh-meta-val { color: var(--ink); font-variant-numeric: tabular-nums; }
 
   @media (max-width: 700px) {
+    .rh-hero { min-height: 560px; }
     .rh-nav, .rh-top-right .rh-pill { display: none; }
+    .rh-copy { padding: 80px 22px 72px; }
+    .rh-tagline { margin-bottom: 18px; }
+    .rh-sub { margin-bottom: 22px; }
     .rh-bottom-meta { font-size: 9.5px; gap: 8px; flex-wrap: wrap; }
   }
 `;

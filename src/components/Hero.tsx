@@ -108,7 +108,7 @@ const SPEED = 0.45;
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [telemetry, setTelemetry] = useState({ gen: 2847, sigs: 42, cycle: 0 });
+  const [telemetry, setTelemetry] = useState({ gen: 2847, cycle: 0 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -228,8 +228,7 @@ export default function Hero() {
       setTelemetry(prev => {
         const cycle = (prev.cycle + 1) % 60;
         const gen = cycle === 0 ? prev.gen + 1 : prev.gen;
-        const sigs = 35 + Math.floor(Math.random() * 25);
-        return { gen, sigs, cycle };
+        return { gen, cycle };
       });
     }, 1000);
     return () => clearInterval(id);
@@ -245,10 +244,6 @@ export default function Hero() {
           <div className="rh-mark" />
           <span>RunHQ</span>
         </div>
-        <nav className="rh-nav">
-          <a href="#products">Products</a>
-          <a href="#about">Docs</a>
-        </nav>
         <div className="rh-top-right">
           <span className="rh-pill">
             <span className="rh-pill-dot" />
@@ -259,23 +254,17 @@ export default function Hero() {
       </header>
 
       <div className="rh-copy">
-        <h1 className="rh-tagline"><em>Self-evolving</em> software is here.</h1>
+        <h1 className="rh-tagline">Watch your app <em>build itself</em></h1>
         <p className="rh-sub">
-          Users send feedback. Agents build. <strong>You ship.</strong>
+          RunHQ collects user feedback, AI agents build from it, and <strong>you decide what ships.</strong>
         </p>
         <div className="rh-ctas">
           <a className="rh-btn rh-btn-primary" href={SIGNUP_URL}>
-            Sign up <span aria-hidden="true">→</span>
+            Get Started
           </a>
         </div>
       </div>
 
-      <div className="rh-bottom-meta mono" aria-hidden="true">
-        <div className="rh-meta-cell">signals/min <span className="rh-meta-val">{telemetry.sigs}</span></div>
-        <div className="rh-meta-cell">agents <span className="rh-meta-val">11/14</span></div>
-        <div className="rh-meta-cell">cycle <span className="rh-meta-val">{telemetry.cycle}s</span></div>
-        <div className="rh-meta-cell">latency <span className="rh-meta-val">112ms</span></div>
-      </div>
     </div>
   );
 }
@@ -323,8 +312,7 @@ const HERO_STYLES = `
   /* Top bar */
   .rh-topbar {
     position: absolute; top: 0; left: 0; right: 0;
-    display: grid; grid-template-columns: 1fr auto 1fr;
-    align-items: center;
+    display: flex; justify-content: space-between; align-items: center;
     padding: 22px 32px;
     z-index: 10;
   }
@@ -343,12 +331,6 @@ const HERO_STYLES = `
     0%   { transform: scale(1);   opacity: 1; }
     100% { transform: scale(2.2); opacity: 0; }
   }
-  .rh-nav {
-    display: flex; gap: 28px; justify-self: center;
-    font-size: 13px; color: var(--ink-dim);
-  }
-  .rh-nav a { color: inherit; text-decoration: none; }
-  .rh-nav a:hover { color: var(--ink); }
   .rh-top-right {
     display: flex; gap: 10px; align-items: center;
     justify-self: end;
@@ -412,12 +394,13 @@ const HERO_STYLES = `
     color: transparent;
   }
   .rh-sub {
-    font-size: clamp(15px, 1.2vw, 18px);
+    font-size: clamp(17px, 1.35vw, 20px);
     line-height: 1.55;
-    color: var(--ink-dim);
+    color: oklch(0.92 0.01 240);
     max-width: 640px;
     margin: 0 auto 32px;
     text-wrap: pretty;
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.55);
   }
   .rh-sub strong { color: var(--ink); font-weight: 500; }
   .rh-ctas { display: inline-flex; gap: 12px; align-items: center; }
@@ -446,24 +429,11 @@ const HERO_STYLES = `
   }
   .rh-btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* Bottom telemetry */
-  .rh-bottom-meta {
-    position: absolute;
-    left: 32px; right: 32px; bottom: 18px;
-    display: flex; justify-content: space-between; align-items: center;
-    z-index: 5;
-    color: var(--ink-faint); font-size: 10.5px;
-    pointer-events: none;
-  }
-  .rh-meta-cell { display: inline-flex; gap: 6px; align-items: center; }
-  .rh-meta-val { color: var(--ink); font-variant-numeric: tabular-nums; }
-
   @media (max-width: 700px) {
     .rh-hero { min-height: 560px; }
-    .rh-nav, .rh-top-right .rh-pill { display: none; }
+    .rh-top-right .rh-pill { display: none; }
     .rh-copy { padding: 80px 22px 72px; }
     .rh-tagline { margin-bottom: 18px; }
     .rh-sub { margin-bottom: 22px; }
-    .rh-bottom-meta { font-size: 9.5px; gap: 8px; flex-wrap: wrap; }
   }
 `;

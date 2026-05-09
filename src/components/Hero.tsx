@@ -430,8 +430,8 @@ const HERO_STYLES = `
   }
   .rh-prompt-input::placeholder { color: var(--ink-faint); }
   .rh-prompt-input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px oklch(0.86 0.19 180 / 0.18);
+    border-color: oklch(0.86 0.19 180 / 0.45);
+    box-shadow: 0 0 0 1px oklch(0.86 0.19 180 / 0.08);
   }
   .rh-prompt-submit {
     position: absolute;

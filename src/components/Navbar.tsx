@@ -10,7 +10,7 @@ const PRODUCTS: { label: string; href: string; desc: string }[] = [
   { label: 'Feedback widget', href: '/widget', desc: 'Capture user input from anywhere.' },
 ];
 
-export default function HeroNavbar() {
+export default function Navbar({ floating = false }: { floating?: boolean } = {}) {
   const [productsOpen, setProductsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -25,7 +25,7 @@ export default function HeroNavbar() {
   }, []);
 
   return (
-    <header className="rh-nav">
+    <header className={`rh-nav ${floating ? 'rh-nav-floating' : 'rh-nav-sticky'}`}>
       <style>{NAVBAR_STYLES}</style>
 
       <a className="rh-nav-brand" href="/">
@@ -71,8 +71,7 @@ export default function HeroNavbar() {
 
 const NAVBAR_STYLES = `
   .rh-nav {
-    position: absolute; top: 0; left: 0; right: 0;
-    z-index: 10;
+    z-index: 50;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -80,6 +79,15 @@ const NAVBAR_STYLES = `
     font-family: 'Inter Tight', system-ui, sans-serif;
     font-size: 14px;
     color: oklch(0.97 0.005 240);
+  }
+  .rh-nav-floating {
+    position: absolute; top: 0; left: 0; right: 0;
+  }
+  .rh-nav-sticky {
+    position: sticky; top: 0;
+    background: rgba(10, 14, 22, 0.78);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
   .rh-nav *, .rh-nav *::before, .rh-nav *::after { box-sizing: border-box; }
 

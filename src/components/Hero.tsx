@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
-import HeroNavbar from './HeroNavbar';
+import Navbar from './Navbar';
 
 const SIGNUP_URL = 'https://app.runhq.io/signup';
 
@@ -258,7 +258,7 @@ export default function Hero({ variant = 'default' }: { variant?: HeroVariant } 
       <style>{HERO_STYLES}</style>
       <canvas ref={canvasRef} className="rh-stage" />
 
-      <HeroNavbar />
+      <Navbar floating />
 
       <div className="rh-copy">
         {variant === 'automate' ? (

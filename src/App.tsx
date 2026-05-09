@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import RunHQPage from './pages/RunHQPage';
 import WidgetPage from './pages/WidgetPage';
 import ProjectPage from './pages/ProjectPage';
 import ProjectTaskPage from './pages/ProjectTaskPage';
 import ProjectsPage from './pages/ProjectsPage';
+import PricingPage from './pages/PricingPage';
+import DocsPage from './pages/DocsPage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -158,7 +160,8 @@ function Layout() {
         <Route path="/automate" element={<HomePage heroVariant="automate" />} />
         <Route path="/runhq" element={<RunHQPage />} />
         <Route path="/widget" element={<WidgetPage />} />
-        <Route path="/pricing" element={<Navigate to="/" replace />} />
+        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/docs" element={<DocsPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/project/:slug" element={<ProjectPage />} />
         <Route path="/project/:slug/proposals/:ticketId" element={<ProjectTaskPage />} />

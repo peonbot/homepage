@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import HeroNavbar from './HeroNavbar';
 
 const SIGNUP_URL = 'https://app.runhq.io/signup';
 const LOGIN_URL = 'https://app.runhq.io';
@@ -258,20 +259,43 @@ export default function Hero({ variant = 'default' }: { variant?: HeroVariant } 
       <style>{HERO_STYLES}</style>
       <canvas ref={canvasRef} className="rh-stage" />
 
-      <header className="rh-topbar">
-        <div className="rh-brand">
-          <div className="rh-mark" />
-          <span>RunHQ</span>
-        </div>
-        <div className="rh-top-right">
-          <a className="rh-btn-sign" href={LOGIN_URL}>Sign in</a>
-        </div>
-      </header>
+      {variant === 'automate' ? (
+        <HeroNavbar />
+      ) : (
+        <header className="rh-topbar">
+          <div className="rh-brand">
+            <div className="rh-mark" />
+            <span>RunHQ</span>
+          </div>
+          <div className="rh-top-right">
+            <a className="rh-btn-sign" href={LOGIN_URL}>Sign in</a>
+          </div>
+        </header>
+      )}
 
       <div className="rh-copy">
         {variant === 'automate' ? (
           <>
-            <h1 className="rh-tagline">What do you want to automate?</h1>
+            <h1 className="rh-tagline rh-tagline-platform">
+              Build at lightspeed.<br />Stay in the loop.
+            </h1>
+            <p className="rh-sub-platform">
+              RunHQ turns user feedback into shipped product — with full receipts at every step.
+            </p>
+            <div className="rh-pillars">
+              <div className="rh-pillar">
+                <div className="rh-pillar-label">Build at lightspeed</div>
+                <div className="rh-pillar-desc">Agents ship in hours, not sprints.</div>
+              </div>
+              <div className="rh-pillar">
+                <div className="rh-pillar-label">Full transparency</div>
+                <div className="rh-pillar-desc">Every change traces back to user feedback.</div>
+              </div>
+              <div className="rh-pillar">
+                <div className="rh-pillar-label">Closed feedback loop</div>
+                <div className="rh-pillar-desc">Feedback in. Product out. Repeat.</div>
+              </div>
+            </div>
             <div className="rh-prompt-form">
               <textarea
                 ref={textareaRef}
@@ -469,6 +493,50 @@ const HERO_STYLES = `
   }
   .rh-btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
+  /* Automate variant: tighter headline + pillars */
+  .rh-tagline-platform {
+    font-size: clamp(34px, 4.6vw, 68px);
+    line-height: 1.02;
+    margin-bottom: 20px;
+  }
+  .rh-sub-platform {
+    font-size: clamp(15px, 1.2vw, 18px);
+    line-height: 1.55;
+    color: oklch(0.88 0.01 240);
+    max-width: 640px;
+    margin: 0 auto 28px;
+    text-wrap: pretty;
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.55);
+  }
+  .rh-pillars {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    max-width: 760px;
+    width: 100%;
+    margin: 0 auto 32px;
+    text-align: left;
+  }
+  .rh-pillar {
+    padding: 14px 16px;
+    border-left: 1.5px solid oklch(0.86 0.19 180 / 0.55);
+    background: rgba(14, 17, 22, 0.4);
+    backdrop-filter: blur(8px);
+    border-radius: 0 10px 10px 0;
+  }
+  .rh-pillar-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    color: oklch(0.96 0.005 240);
+    margin-bottom: 4px;
+  }
+  .rh-pillar-desc {
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: oklch(0.74 0.01 240);
+  }
+
   /* Prompt input */
   .rh-prompt-form {
     position: relative;
@@ -556,5 +624,7 @@ const HERO_STYLES = `
     .rh-sub { margin-bottom: 22px; }
     .rh-prompt-input { min-height: 110px; }
     .rh-chip { font-size: 12px; padding: 7px 12px; }
+    .rh-pillars { grid-template-columns: 1fr; gap: 8px; margin-bottom: 24px; }
+    .rh-pillar { padding: 10px 14px; }
   }
 `;

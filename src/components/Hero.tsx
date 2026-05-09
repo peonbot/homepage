@@ -1,7 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 
 const SIGNUP_URL = 'https://app.runhq.io/signup';
 const LOGIN_URL = 'https://app.runhq.io';
+
+const CHIP_PROMPTS = [
+  'Triage support tickets',
+  'Sync Stripe to Notion',
+  'Daily standup digest',
+  'Auto-tag GitHub issues',
+];
 
 const PALETTE = {
   A:  [0.22, 0.95, 0.85],
@@ -108,6 +115,26 @@ const SPEED = 0.45;
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [prompt, setPrompt] = useState('');
+
+  function handleSubmit() {
+    const trimmed = prompt.trim();
+    if (!trimmed) return;
+    window.location.href = `${SIGNUP_URL}?prompt=${encodeURIComponent(trimmed)}`;
+  }
+
+  function handleKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  }
+
+  function handleChipClick(text: string) {
+    setPrompt(text);
+    textareaRef.current?.focus();
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -238,14 +265,39 @@ export default function Hero() {
       </header>
 
       <div className="rh-copy">
-        <h1 className="rh-tagline">Watch your app <em>build itself</em></h1>
-        <p className="rh-sub">
-          RunHQ collects user feedback, AI agents build from it, and <strong>you decide what ships.</strong>
-        </p>
-        <div className="rh-ctas">
-          <a className="rh-btn rh-btn-primary" href={SIGNUP_URL}>
-            Get Started
-          </a>
+        <h1 className="rh-tagline">What do you want to automate?</h1>
+        <div className="rh-prompt-form">
+          <textarea
+            ref={textareaRef}
+            className="rh-prompt-input"
+            placeholder="Describe a workflow…"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={handleKeyDown}
+            rows={3}
+            maxLength={500}
+          />
+          <button
+            type="button"
+            className="rh-prompt-submit"
+            onClick={handleSubmit}
+            disabled={!prompt.trim()}
+            aria-label="Submit"
+          >
+            →
+          </button>
+        </div>
+        <div className="rh-chips">
+          {CHIP_PROMPTS.map((text) => (
+            <button
+              key={text}
+              type="button"
+              className="rh-chip"
+              onClick={() => handleChipClick(text)}
+            >
+              {text}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -351,56 +403,92 @@ const HERO_STYLES = `
     color: var(--ink);
     text-wrap: balance;
   }
-  .rh-tagline em {
-    font-style: normal;
-    background: linear-gradient(100deg,
-      oklch(0.96 0.14 180) 0%,
-      oklch(0.88 0.22 160) 45%,
-      oklch(0.85 0.22 130) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+
+  /* Prompt input */
+  .rh-prompt-form {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
   }
-  .rh-sub {
-    font-size: clamp(17px, 1.35vw, 20px);
-    line-height: 1.55;
-    color: oklch(0.92 0.01 240);
-    max-width: 640px;
-    margin: 0 auto 32px;
-    text-wrap: pretty;
-    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.55);
-  }
-  .rh-sub strong { color: var(--ink); font-weight: 500; }
-  .rh-ctas { display: inline-flex; gap: 12px; align-items: center; }
-  .rh-btn {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 14px 22px;
+  .rh-prompt-input {
+    width: 100%;
+    min-height: 120px;
+    padding: 18px 20px 56px;
     font-family: inherit;
-    font-size: 14px; font-weight: 500;
-    border-radius: 10px;
-    text-decoration: none; cursor: pointer;
-    transition: transform .18s, background .2s, border-color .2s;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--ink);
+    background: rgba(10, 12, 16, 0.65);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    resize: none;
+    outline: none;
+    backdrop-filter: blur(14px);
+    transition: border-color 0.18s, box-shadow 0.18s;
   }
-  .rh-btn-primary {
-    background: linear-gradient(180deg, oklch(0.93 0.17 180), oklch(0.78 0.2 180));
+  .rh-prompt-input::placeholder { color: var(--ink-faint); }
+  .rh-prompt-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px oklch(0.86 0.19 180 / 0.18);
+  }
+  .rh-prompt-submit {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1;
     color: #061014;
+    background: linear-gradient(180deg, oklch(0.93 0.17 180), oklch(0.78 0.2 180));
     border: 1px solid oklch(0.86 0.18 180);
+    border-radius: 50%;
+    cursor: pointer;
     box-shadow:
       0 0 0 1px oklch(0.86 0.19 180 / 0.25),
-      0 12px 44px -10px oklch(0.86 0.19 180 / 0.55),
+      0 8px 24px -8px oklch(0.86 0.19 180 / 0.55),
       inset 0 1px 0 rgba(255,255,255,0.35);
+    transition: transform 0.18s, opacity 0.18s;
   }
-  .rh-btn-primary:hover { transform: translateY(-1px); }
-  .rh-btn-ghost {
-    background: rgba(12,14,18,0.55); color: var(--ink);
-    border: 1px solid var(--line); backdrop-filter: blur(10px);
+  .rh-prompt-submit:hover:not(:disabled) { transform: translateY(-1px); }
+  .rh-prompt-submit:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
-  .rh-btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Suggestion chips */
+  .rh-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 18px;
+    max-width: 720px;
+  }
+  .rh-chip {
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--ink);
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(10, 12, 16, 0.55);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: border-color 0.18s, color 0.18s;
+  }
+  .rh-chip:hover { border-color: var(--accent); color: var(--accent); }
 
   @media (max-width: 700px) {
     .rh-hero { min-height: 560px; }
     .rh-copy { padding: 80px 22px 72px; }
     .rh-tagline { margin-bottom: 18px; }
-    .rh-sub { margin-bottom: 22px; }
+    .rh-prompt-input { min-height: 110px; }
+    .rh-chip { font-size: 12px; padding: 7px 12px; }
   }
 `;

@@ -1,14 +1,14 @@
-import Hero from '../components/Hero';
+import Hero, { type HeroVariant } from '../components/Hero';
 
 const SIGNUP_URL = 'https://app.runhq.io/signup';
 const LOGIN_URL = 'https://app.runhq.io';
 
-export default function HomePage() {
+export default function HomePage({ heroVariant = 'default' }: { heroVariant?: HeroVariant } = {}) {
   return (
     <div className="rh-home">
       <style>{HOME_STYLES}</style>
 
-      <Hero />
+      <Hero variant={heroVariant} />
 
       {/* DEMO VIDEO */}
       <section className="demo" id="demo">

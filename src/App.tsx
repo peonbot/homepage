@@ -21,7 +21,7 @@ function Layout() {
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { pathname } = useLocation();
-  const isHome = pathname === '/';
+  const isHome = pathname === '/' || pathname === '/automate';
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -37,6 +37,7 @@ function Layout() {
     return (
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/automate" element={<HomePage heroVariant="automate" />} />
       </Routes>
     );
   }
@@ -154,6 +155,7 @@ function Layout() {
 
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/automate" element={<HomePage heroVariant="automate" />} />
         <Route path="/runhq" element={<RunHQPage />} />
         <Route path="/widget" element={<WidgetPage />} />
         <Route path="/pricing" element={<Navigate to="/" replace />} />

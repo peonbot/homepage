@@ -163,7 +163,7 @@ export default function HomePage() {
               onClick={() => setDemoOpen(true)}
             >
               <span className="rhw-play">▶</span>
-              Watch 90s demo
+              Watch Demo
             </button>
           </div>
 

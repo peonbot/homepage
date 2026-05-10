@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { Navbar, Footer } from '../components/chrome';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://console.runhq.io';
 
@@ -64,25 +65,35 @@ export default function ProjectPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
-      </div>
+      <>
+        <Navbar />
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-current border-t-transparent rounded-full animate-spin" style={{ color: 'var(--rhw-accent)' }} />
+        </div>
+        <Footer />
+      </>
     );
   }
 
   if (notFound) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-        <h1 className="text-3xl font-bold text-white">Project Not Found</h1>
-        <p className="text-slate-400">This project doesn't exist or isn't public.</p>
-      </div>
+      <>
+        <Navbar />
+        <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 px-4 text-center">
+          <h1 className="text-3xl font-bold" style={{ color: 'var(--rhw-ink)' }}>Project Not Found</h1>
+          <p style={{ color: 'var(--rhw-ink-mute)' }}>This project doesn't exist or isn't public.</p>
+        </div>
+        <Footer />
+      </>
     );
   }
 
   return (
+    <>
+      <Navbar />
     <div className="max-w-4xl mx-auto px-4 py-16">
-      <h1 className="text-3xl font-bold text-white mb-2">{projectName}</h1>
-      <p className="text-slate-400 mb-8">{tickets.length} ticket{tickets.length !== 1 ? 's' : ''}</p>
+      <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--rhw-ink)' }}>{projectName}</h1>
+      <p className="mb-8" style={{ color: 'var(--rhw-ink-mute)' }}>{tickets.length} ticket{tickets.length !== 1 ? 's' : ''}</p>
 
       {tickets.length === 0 ? (
         <div className="text-center py-16">
@@ -133,5 +144,7 @@ export default function ProjectPage() {
         </div>
       )}
     </div>
+      <Footer />
+    </>
   );
 }

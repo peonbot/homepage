@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ImageLightbox from '../components/ImageLightbox';
+import { Navbar, Footer } from '../components/chrome';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://console.runhq.io';
 
@@ -214,25 +215,35 @@ export default function ProjectTaskPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
-      </div>
+      <>
+        <Navbar />
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-current border-t-transparent rounded-full animate-spin" style={{ color: 'var(--rhw-accent)' }} />
+        </div>
+        <Footer />
+      </>
     );
   }
 
   if (notFound || !detail) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-        <h1 className="text-3xl font-bold text-white">Task Not Found</h1>
-        <p className="text-slate-400">This task doesn't exist or isn't public.</p>
-        <Link to={`/project/${slug}`} className="text-cyan-400 hover:text-cyan-300">
-          Back to project
-        </Link>
-      </div>
+      <>
+        <Navbar />
+        <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 px-4 text-center">
+          <h1 className="text-3xl font-bold" style={{ color: 'var(--rhw-ink)' }}>Task Not Found</h1>
+          <p style={{ color: 'var(--rhw-ink-mute)' }}>This task doesn't exist or isn't public.</p>
+          <Link to={`/project/${slug}`} style={{ color: 'var(--rhw-accent)' }}>
+            Back to project
+          </Link>
+        </div>
+        <Footer />
+      </>
     );
   }
 
   return (
+    <>
+      <Navbar />
     <div className="max-w-5xl mx-auto px-4 py-12">
       <Link to={`/project/${slug}`} className="inline-flex items-center gap-2 text-sm text-cyan-400 hover:text-cyan-300 mb-6">
         <span>←</span>
@@ -315,5 +326,7 @@ export default function ProjectTaskPage() {
         </div>
       </div>
     </div>
+      <Footer />
+    </>
   );
 }

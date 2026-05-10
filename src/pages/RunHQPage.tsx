@@ -1,3 +1,4 @@
+import { Navbar, Footer } from '../components/chrome';
 
 const SIGNUP_URL = 'https://app.runhq.io/signup';
 
@@ -5,6 +6,7 @@ export default function RunHQPage() {
   return (
     <div className="rh-runhq">
       <style>{RUNHQ_STYLES}</style>
+      <Navbar />
 
       {/* Hero */}
       <section className="rq-hero">
@@ -128,6 +130,7 @@ export default function RunHQPage() {
           <a className="rq-cta-ghost" href="/agent-automation">Try the demo</a>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

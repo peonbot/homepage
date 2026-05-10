@@ -1,3 +1,4 @@
+import { Navbar, Footer } from '../components/chrome';
 
 const SIGNUP_URL = 'https://app.runhq.io/signup';
 
@@ -5,6 +6,7 @@ export default function WidgetPage() {
   return (
     <div className="rh-widget">
       <style>{WIDGET_STYLES}</style>
+      <Navbar />
 
       {/* Hero */}
       <section className="rw-hero">
@@ -136,6 +138,7 @@ export default function WidgetPage() {
           <a className="rh-cta-ghost" href="/agent-automation">See it live</a>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

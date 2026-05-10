@@ -3,24 +3,43 @@
 @tailwind utilities;
 
 :root {
-  --bg-deep:    #050608;
-  --bg:         #0a0d12;
-  --bg-soft:    #0f141b;
-  --ink:        oklch(0.97 0.005 240);
-  --ink-dim:    oklch(0.78 0.01 240);
-  --ink-mute:   oklch(0.62 0.012 240);
-  --ink-faint:  oklch(0.48 0.012 240);
-  --line:       rgba(255, 255, 255, 0.08);
-  --line-bold:  rgba(255, 255, 255, 0.14);
-  --accent:     oklch(0.86 0.19 180);
-  --accent-2:   oklch(0.82 0.21 145);
-  --accent-3:   oklch(0.82 0.18 70);
+  /* Light "Workspace" palette */
+  --rhw-bg:        #fbfaf7;
+  --rhw-bg-2:      #f4f1ea;
+  --rhw-surface:   #ffffff;
+  --rhw-ink:       #14130f;
+  --rhw-ink-soft:  #423f38;
+  --rhw-ink-mute:  #7a7568;
+  --rhw-ink-faint: #b3ad9d;
+  --rhw-line:      #e1dccf;
+  --rhw-line-soft: #ece7da;
+  --rhw-accent:    oklch(0.52 0.20 277);
+  --rhw-accent-2:  oklch(0.62 0.20 27);
+  --rhw-accent-soft: oklch(0.52 0.20 277 / 0.10);
+  --rhw-good:      #1c8b50;
+  --rhw-warn:      #c98c1f;
+  --rhw-bad:       #d44a3a;
+
+  /* Aliases used by static pages chrome */
+  --rhp-bg:        var(--rhw-bg);
+  --rhp-bg-2:      var(--rhw-bg-2);
+  --rhp-surface:   var(--rhw-surface);
+  --rhp-ink:       var(--rhw-ink);
+  --rhp-ink-soft:  var(--rhw-ink-soft);
+  --rhp-ink-mute:  var(--rhw-ink-mute);
+  --rhp-ink-faint: var(--rhw-ink-faint);
+  --rhp-line:      var(--rhw-line);
+  --rhp-line-soft: var(--rhw-line-soft);
+  --rhp-accent:    var(--rhw-accent);
+  --rhp-accent-2:  var(--rhw-accent-2);
+  --rhp-accent-soft: var(--rhw-accent-soft);
+  --rhp-good:      var(--rhw-good);
 }
 
 html, body, #root {
-  background: var(--bg-deep);
-  color: var(--ink);
-  font-family: 'Inter Tight', system-ui, sans-serif;
+  background: var(--rhw-bg);
+  color: var(--rhw-ink);
+  font-family: 'Geist', 'Inter Tight', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }

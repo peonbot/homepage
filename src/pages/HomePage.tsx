@@ -20,66 +20,18 @@ const LoopCapture = () => (
   </div>
 );
 
-const HERO_ROLES: { label: string; copy: string }[] = [
-  {
-    label: 'PM',
-    copy: 'Ship product without rewriting your ticket as a spec. You file the work, RunHQ scopes the branch, an agent opens the PR. Engineering reviews — you stay out of the rewriting loop.',
-  },
-  {
-    label: 'Engineer',
-    copy: 'Triage to agents instead of context-switching. The small fixes, the cleanups, the "while you\'re in there" — an agent picks them up, you review the diff. You keep the deep work.',
-  },
-  {
-    label: 'Design',
-    copy: 'Push a copy tweak or a spacing fix straight to a branch. An agent ships the diff, you check the preview, no eng meeting needed for the changes you can already see.',
-  },
-  {
-    label: 'QA',
-    copy: 'File the bug with a repro and assign it. The agent writes a failing test, lands the fix, and you re-run your suite against the PR. No "added to the backlog" black hole.',
-  },
-  {
-    label: 'Support',
-    copy: 'Turn the Intercom thread into a fix in motion. Captured ticket → scoped task → agent shipping a branch — often before the customer hears back from you.',
-  },
-  {
-    label: 'Sales',
-    copy: 'The deal-blocking edge case the prospect demoed yesterday? Open a ticket, assign an agent. By the next call you\'re showing them the PR, not promising a roadmap slot.',
-  },
-  {
-    label: 'Founder',
-    copy: 'Your whole company can ship to the codebase. The hundred small fixes that pile up between the things engineering "should be doing" finally get shipped — without anyone context-switching to do them.',
-  },
-];
+const HERO_ROLES = ['PM', 'Engineer', 'Design', 'QA', 'Support', 'Sales', 'Founder'];
 
-const HeroRoles = () => {
-  const [active, setActive] = useState(0);
-
-  return (
-    <div className="rhw-hero-roles">
-      <div className="rhw-hero-roles-h">Built for everyone who ships</div>
-      <div className="rhw-hero-roles-pills" role="group" aria-label="Roles">
-        {HERO_ROLES.map((role, i) => (
-          <button
-            key={role.label}
-            type="button"
-            className="rhw-hero-role-pill"
-            aria-pressed={i === active}
-            onClick={() => setActive(i)}
-          >
-            {role.label}
-          </button>
-        ))}
-      </div>
-      <p
-        key={active}
-        className="rhw-hero-role-copy"
-        aria-live="polite"
-      >
-        {HERO_ROLES[active].copy}
-      </p>
+const HeroRoles = () => (
+  <div className="rhw-hero-roles">
+    <div className="rhw-hero-roles-h">Built for everyone who ships</div>
+    <div className="rhw-hero-roles-pills">
+      {HERO_ROLES.map((role) => (
+        <span key={role} className="rhw-hero-role-pill">{role}</span>
+      ))}
     </div>
-  );
-};
+  </div>
+);
 
 const LoopAssign = () => (
   <div className="rhw-lv rhw-lv-assign">

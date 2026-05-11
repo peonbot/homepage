@@ -112,7 +112,7 @@ const HOME_T = {
   ko: {
     // Hero
     heroH1Line1: 'AI 코딩 에이전트를',
-    heroH1Line2: '오케스트레이션하세요.',
+    heroH1Line2: '지휘하세요.',
     heroLede: 'RunHQ는 팀 누구나 코딩 에이전트에게 티켓을 할당할 수 있게 해줍니다. 모든 작업이 자체 브랜치에서 범위가 정해진 채로 리뷰 준비 상태로 도착해, 프로덕트와 엔지니어링 사이의 병목을 없앱니다.',
     ctaStartFree: '무료로 시작하기',
     ctaWatchDemo: '데모 보기',

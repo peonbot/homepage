@@ -125,7 +125,7 @@ const PRODUCTS_T = {
     p1Name: '에이전트 자동화',
     p1Pitch:
       '사용자 피드백을 받아 실행 컨텍스트로 패키징하고, Claude Code, Cursor, Codex, Devin에 디스패치합니다. 스크린샷, 재현 절차, 스택 트레이스를 다시는 잃지 마세요.',
-    p1Blurb: '오케스트레이션 레이어.',
+    p1Blurb: '에이전트 지휘 레이어.',
     p1H1: '정책 가드레일이 적용된 멀티 에이전트 디스패치',
     p1H2: '컨텍스트 번들: 재현 절차, 로그, 스크린샷, 이전 실행 기록',
     p1H3: 'Linear, GitHub, Slack, Intercom과 양방향 동기화',

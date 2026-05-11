@@ -46,6 +46,11 @@ html, body, #root {
 
 body { margin: 0; }
 
+:lang(ko) {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
 .mono {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
 }

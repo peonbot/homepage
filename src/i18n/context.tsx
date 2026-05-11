@@ -31,6 +31,9 @@ export function localeFromPath(pathname: string): Locale {
 export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation();
   const locale = localeFromPath(pathname);
+  useEffect(() => {
+    if (typeof document !== 'undefined') document.documentElement.lang = locale;
+  }, [locale]);
   return <LocaleContext.Provider value={locale}>{children}</LocaleContext.Provider>;
 }
 

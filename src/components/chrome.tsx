@@ -42,9 +42,9 @@ const FOOTER_T = {
     builtFor: 'Built for agent-driven product teams',
   },
   ko: {
-    blurb: 'AI 코딩 agent를 위한 운영 레이어. 캐나다 밴쿠버.',
+    blurb: 'AI 코딩 에이전트를 위한 운영 레이어. 캐나다 밴쿠버.',
     productsH: '제품',
-    agentAutomation: 'agent 자동화',
+    agentAutomation: '에이전트 자동화',
     projectManagement: '프로젝트 관리',
     devEnvironment: '개발 환경',
     feedbackWidget: '피드백 위젯',
@@ -55,7 +55,7 @@ const FOOTER_T = {
     terms: '약관',
     copyright: '© 2026 RunHQ Solutions Inc.',
     tagline: '닫힌 루프 제품 개발',
-    builtFor: 'agent 중심의 제품 팀을 위해 만들어졌습니다',
+    builtFor: '에이전트 중심의 제품 팀을 위해 만들어졌습니다',
   },
 } as const;
 
